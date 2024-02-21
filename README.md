@@ -10,8 +10,5 @@ management, and shopping list population based on missing recipe ingredients. Th
 that the users have actionable insights related to recipes, ingredients, and purchasing needs required for
 upcoming meals. The food tracking system improves grocery shopping, dieting, and daily food
 preparation.
-Your project will be implemented across four sprints. The proceeding descriptions are basic ideas of what
-each sprint should cover. The sprint descriptions are subject to change and requirements may be added
-or removed. There may also be extra credit opportunities in certain sprints for certain extra features
-implemented.
+Your project will be implemented across four sprints.
 
