@@ -3,6 +3,7 @@ package com.example.greenplate;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,23 +12,13 @@ public class Welcome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
-        // Set up start and quit buttons
-        Button startButton = findViewById(R.id.startButton);
-        Button quitButton = findViewById(R.id.quitButton);
-
-        startButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // navigate to our login
-                startActivity(new Intent(Welcome.this, Login.class));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(Welcome.this, Login.class);
+                startActivity(intent);
+                finish();
             }
-        });
-
-        quitButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // exit our app
-                finishAffinity();
-            }
-        });
+        }, 3000);
     }
 }

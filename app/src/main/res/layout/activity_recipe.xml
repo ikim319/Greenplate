@@ -1,9 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Recipe">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/btn_Home"
+        android:layout_width="116dp"
+        android:layout_height="94dp"
+        android:text="@string/home" />
+
+    <Button
+        android:id="@+id/btn_inputmeal"
+        android:layout_width="116dp"
+        android:layout_height="94dp"
+        android:layout_below="@+id/btn_Home"
+        android:text="@string/input_meal" />
+
+
+    <Button
+        android:id="@+id/Ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="102dp"
+        android:layout_below="@+id/btn_inputmeal"
+        android:layout_marginTop="2dp"
+        android:text="@string/ingredients" />
+
+    <Button
+        android:id="@+id/shoppinglist"
+        android:layout_width="wrap_content"
+        android:layout_height="94dp"
+        android:layout_below="@id/Ingredient"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="294dp"
+        android:text="@string/shopping_list" />
+
+    <TextView
+        android:layout_width="99dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/btn_inputmeal"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="-8dp"
+        android:text="@string/recipe_page"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Logout"
+        android:layout_width="121dp"
+        android:layout_height="70dp"
+        android:layout_below="@id/shoppinglist"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="388dp"
+        android:layout_marginEnd="292dp"
+        android:gravity="center"
+        android:text="@string/logout" />
+
+</RelativeLayout>
