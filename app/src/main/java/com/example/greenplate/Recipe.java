@@ -16,18 +16,13 @@ public class Recipe extends AppCompatActivity {
         Button buttonHome = findViewById(R.id.btn_Home);
         Button buttonIngredients = findViewById(R.id.Ingredient);
         Button buttonInputMeal = findViewById(R.id.btn_inputmeal);
-        Button buttonRecipe = findViewById(R.id.Recipe);
         Button buttonShoppingList = findViewById(R.id.shoppinglist);
+        Button buttonBackWelcome = findViewById(R.id.Logout);
+
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(Recipe.this, Home.class));
-            }
-        });
-        buttonRecipe.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // navigate to our login
-                startActivity(new Intent(Recipe.this, Recipe.class));
             }
         });
         buttonShoppingList.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +43,13 @@ public class Recipe extends AppCompatActivity {
             public void onClick(View v) {
                 // navigate to our login
                 startActivity(new Intent(Recipe.this, InputMeal.class));
+            }
+        });
+
+        buttonBackWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Recipe.this, Login.class));
             }
         });
     }

@@ -15,4 +15,10 @@
     <string name="ingredients">Ingredients</string>
     <string name="shopping_list">Shopping List</string>
     <string name="home_page">HOME PAGE</string>
+    <string name="exit_app">Exit App</string>
+    <string name="logout">Logout</string>
+    <string name="input_meal_page">INPUT MEAL PAGE</string>
+    <string name="recipe_page">RECIPE PAGE</string>
+    <string name="ingredients_page">INGREDIENTS PAGE</string>
+    <string name="shopping_list_page">SHOPPING LIST PAGE</string>
 </resources>
