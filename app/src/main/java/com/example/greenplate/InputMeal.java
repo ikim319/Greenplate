@@ -15,9 +15,9 @@ public class InputMeal extends AppCompatActivity {
         setContentView(R.layout.activity_input_meal);
         Button buttonHome = findViewById(R.id.btn_Home);
         Button buttonIngredients = findViewById(R.id.Ingredient);
-        Button buttonInputMeal = findViewById(R.id.btn_inputmeal);
         Button buttonRecipe = findViewById(R.id.Recipe);
         Button buttonShoppingList = findViewById(R.id.shoppinglist);
+        Button buttonBackWelcome = findViewById(R.id.Logout);
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -44,10 +44,10 @@ public class InputMeal extends AppCompatActivity {
             }
         });
 
-        buttonInputMeal.setOnClickListener(new View.OnClickListener() {
+        buttonBackWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                // navigate to our login
-                startActivity(new Intent(InputMeal.this, InputMeal.class));
+                startActivity(new Intent(InputMeal.this, Login.class));
             }
         });
     }
