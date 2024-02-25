@@ -12,17 +12,12 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Button buttonHome = findViewById(R.id.btn_Home);
         Button buttonIngredients = findViewById(R.id.Ingredient);
         Button buttonInputMeal = findViewById(R.id.btn_inputmeal);
         Button buttonRecipe = findViewById(R.id.Recipe);
         Button buttonShoppingList = findViewById(R.id.shoppinglist);
+        Button buttonBackWelcome = findViewById(R.id.Logout);
 
-        buttonHome.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(Home.this, Home.class));
-            }
-        });
         buttonRecipe.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // navigate to our login
@@ -47,6 +42,13 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 // navigate to our login
                 startActivity(new Intent(Home.this, InputMeal.class));
+            }
+        });
+
+        buttonBackWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Home.this, Login.class));
             }
         });
     }
