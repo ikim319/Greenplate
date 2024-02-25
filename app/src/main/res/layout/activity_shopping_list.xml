@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ShoppingList">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/btn_Home"
+        android:layout_width="74dp"
+        android:layout_height="94dp"
+        android:text="@string/home" />
+
+    <Button
+        android:id="@+id/btn_inputmeal"
+        android:layout_width="87dp"
+        android:layout_height="93dp"
+        android:text="@string/input_meal" />
+
+    <Button
+        android:id="@+id/Recipe"
+        android:layout_width="67dp"
+        android:layout_height="100dp"
+        android:text="@string/recipe" />
+
+    <Button
+        android:id="@+id/Ingredient"
+        android:layout_width="94dp"
+        android:layout_height="104dp"
+        android:text="@string/ingredients" />
+
+    <Button
+        android:text="@string/shopping_list"
+        android:id="@+id/shoppinglist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="62dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Shopping list page" />
+
+</LinearLayout>
