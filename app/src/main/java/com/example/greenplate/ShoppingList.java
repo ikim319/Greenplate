@@ -24,6 +24,7 @@ public class ShoppingList extends AppCompatActivity {
                 startActivity(new Intent(ShoppingList.this, Home.class));
             }
         });
+        
         buttonRecipe.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // navigate to our login
