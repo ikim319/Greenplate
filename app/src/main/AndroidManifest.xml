@@ -41,8 +41,30 @@
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
-            android:name=".views.Welcome"
-            android:exported="true">
+=======
+            android:name=".views.ShoppingList"
+            android:exported="false" />
+        <activity
+            android:name=".views.Ingredients"
+            android:exported="false" />
+        <activity
+            android:name=".views.Recipe"
+            android:exported="false" />
+        <activity
+            android:name=".views.InputMeal"
+            android:exported="false" />
+        <activity
+            android:name=".views.Home"
+            android:exported="false" />
+        <activity
+            android:name=".views.AccountCreation"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".views.Login"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            android:exported="false" />
+        <activity
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
