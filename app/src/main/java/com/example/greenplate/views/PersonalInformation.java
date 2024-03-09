@@ -8,22 +8,36 @@ import android.widget.Button;
 import com.example.greenplate.R;
 import android.view.View;
 import android.content.Intent;
+import android.widget.EditText;
 
 
 public class PersonalInformation extends AppCompatActivity {
 
+    EditText editTextHeight;
+    EditText editTextWeight;
+    EditText editTextGender;
 
-    Button buttonHome = findViewById(R.id.btn_Home);
-    Button buttonIngredients = findViewById(R.id.Ingredient);
-    Button buttonInputMeal = findViewById(R.id.btn_inputmeal);
-    Button buttonRecipe = findViewById(R.id.Recipe);
-    Button buttonShoppingList = findViewById(R.id.shoppinglist);
-    Button buttonBackWelcome = findViewById(R.id.Logout);
+    Button buttonHome;
+    Button buttonIngredients;
+    Button buttonInputMeal;
+    Button buttonRecipe;
+    Button buttonShoppingList;
+    Button buttonBackWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
+        editTextHeight = findViewById(R.id.editTextHeight);
+        editTextWeight = findViewById(R.id.editTextWeight);
+        editTextGender = findViewById(R.id.editTextGender);
+
+        buttonHome = findViewById(R.id.btn_Home);
+        buttonIngredients = findViewById(R.id.Ingredient);
+        buttonInputMeal = findViewById(R.id.btn_inputmeal);
+        buttonRecipe = findViewById(R.id.Recipe);
+        buttonShoppingList = findViewById(R.id.shoppinglist);
+
 
     buttonHome.setOnClickListener(new View.OnClickListener() {
         @Override

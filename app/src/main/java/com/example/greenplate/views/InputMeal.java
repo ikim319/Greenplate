@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.greenplate.R;
 
@@ -20,6 +21,8 @@ public class InputMeal extends AppCompatActivity {
         Button buttonRecipe = findViewById(R.id.Recipe);
         Button buttonShoppingList = findViewById(R.id.shoppinglist);
         Button buttonBackWelcome = findViewById(R.id.Logout);
+        Button buttonPersonalInfo = findViewById(R.id.PInformation);
+
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -52,5 +55,27 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, Login.class));
             }
         });
+
+        buttonPersonalInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InputMeal.this, PersonalInformation.class));
+            }
+        });
+
+    }
+
+    /*
+    method for updating the height, weight, and gender displayed on InputMeal
+    waiting for database integration to finish
+     */
+    private void updateUserInfoTextViews(String height, String weight, String gender) {
+        TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
+        TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
+        TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
+
+        textViewHeightValue.setText(height);
+        textViewWeightValue.setText(weight);
+        textViewGenderValue.setText(gender);
     }
 }
