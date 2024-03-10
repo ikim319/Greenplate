@@ -26,4 +26,6 @@
     <string name="enter_gender">Enter Gender</string>
     <string name="enter_height">Enter Height</string>
     <string name="log">Log</string>
+    <string name="enter_meal">Enter Meal</string>
+    <string name="enter_calories">Enter Calories</string>
 </resources>
