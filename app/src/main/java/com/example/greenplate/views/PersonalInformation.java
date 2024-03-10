@@ -22,6 +22,7 @@ public class PersonalInformation extends AppCompatActivity {
 
     EditText editTextHeight, editTextWeight, editTextGender;
     private DatabaseReference rootDatabref;
+    FirebaseManager manager;
 
 
     @Override
@@ -41,6 +42,8 @@ public class PersonalInformation extends AppCompatActivity {
         Button buttonLog = findViewById(R.id.btn_Log);
 
         rootDatabref = FirebaseManager.getInstance().getRef().child("Users");
+        manager = FirebaseManager.getInstance();
+
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,9 +102,17 @@ public class PersonalInformation extends AppCompatActivity {
         String Gender = editTextGender.getText().toString();
 
         Users users = new Users(Height, Weight, Gender);
-        rootDatabref.push().setValue(users);
+        String userId = manager.getAuth().getCurrentUser().getUid();
+
+        DatabaseReference userRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(userId)
+                .child("Personal_Info");
+
+        userRef.setValue(users);
         Toast.makeText(PersonalInformation.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
+
 
 
 }

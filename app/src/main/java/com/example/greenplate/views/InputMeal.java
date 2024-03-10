@@ -185,8 +185,6 @@ public class InputMeal extends AppCompatActivity {
 //            // Add more data entries...
 //            return data;
 //        }
-<<<<<<< HEAD
-
  */
 
 
