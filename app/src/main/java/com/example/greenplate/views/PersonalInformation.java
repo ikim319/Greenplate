@@ -40,7 +40,7 @@ public class PersonalInformation extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonLog = findViewById(R.id.btn_Log);
 
-        rootDatabref = FirebaseDatabase.getInstance().getReference().child("Users");
+        rootDatabref = FirebaseManager.getInstance().getRef().child("Users");
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
