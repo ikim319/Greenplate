@@ -27,6 +27,7 @@ public class InputMeal extends AppCompatActivity {
     EditText editTextMeal, editTextCalories;
     FirebaseManager manager;
     private DatabaseReference rootDatabref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +90,7 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, PersonalInformation.class));
             }
         });
+    }
 
     private void saveMeal() {
         String mealName = editTextMeal.getText().toString();
@@ -109,7 +111,7 @@ public class InputMeal extends AppCompatActivity {
         Toast.makeText(InputMeal.this, "Meal saved successfully!", Toast.LENGTH_SHORT).show();
     }
 
-    
+
 //        private AnyChartView chartView;
 //        private Button userVisualizationButton;
 //        private Button mealVisualizationButton;
@@ -180,7 +182,6 @@ public class InputMeal extends AppCompatActivity {
 //            // Add more data entries...
 //            return data;
 //        }
-//    }
 
 
 
@@ -200,4 +201,3 @@ public class InputMeal extends AppCompatActivity {
         }
     }
 
-}
