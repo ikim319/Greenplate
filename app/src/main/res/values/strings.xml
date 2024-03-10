@@ -28,4 +28,5 @@
     <string name="log">Log</string>
     <string name="enter_meal">Enter Meal</string>
     <string name="enter_calories">Enter Calories</string>
+    <string name="error">Error</string>
 </resources>

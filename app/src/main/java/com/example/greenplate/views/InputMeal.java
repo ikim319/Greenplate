@@ -1,5 +1,6 @@
 package com.example.greenplate.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,8 +14,11 @@ import android.widget.Toast;
 import com.example.greenplate.R;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 //import com.anychart.AnyChart;
 //import com.anychart.AnyChartView;
@@ -27,6 +31,7 @@ public class InputMeal extends AppCompatActivity {
     EditText editTextMeal, editTextCalories;
     FirebaseManager manager;
     private DatabaseReference rootDatabref;
+    private DatabaseReference userDatabref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,47 @@ public class InputMeal extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
         Button buttonLog = findViewById(R.id.btn_Log);
+
+        TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
+        TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
+        TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
+
         manager = FirebaseManager.getInstance();
         editTextMeal = findViewById(R.id.editTextMeal);
         editTextCalories = findViewById(R.id.editTextCalories);
 
         rootDatabref = manager.getRef().child("Meal");
 
+
+        String userId = manager.getAuth().getCurrentUser().getUid();
+
+        // Initialize Firebase Database reference for the user's data
+        userDatabref = manager.getRef().child("Users").child(userId).child("Personal_Info");
+
+        // Attach a ValueEventListener to read data from Firebase
+        userDatabref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again whenever data at this location is updated
+
+                // Retrieve the data from the dataSnapshot
+                String height = dataSnapshot.child("height").getValue(String.class);
+                String weight = dataSnapshot.child("weight").getValue(String.class);
+                String gender = dataSnapshot.child("gender").getValue(String.class);
+
+                // Update the TextViews with the retrieved data
+                textViewHeightValue.setText(height);
+                textViewWeightValue.setText(weight);
+                textViewGenderValue.setText(gender);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                textViewHeightValue.setText(R.string.error);
+                textViewWeightValue.setText(R.string.error);
+                textViewGenderValue.setText(R.string.error);
+            }
+        });
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,21 +226,5 @@ public class InputMeal extends AppCompatActivity {
 //            return data;
 //        }
  */
-
-
-    /*
-    method for updating the height, weight, and gender displayed on InputMeal
-    waiting for database integration to finish
-     */
-    private void updateUserInfoTextViews(String height, String weight, String gender) {
-        TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
-        TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
-        TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
-
-        textViewHeightValue.setText(height);
-        textViewWeightValue.setText(weight);
-        textViewGenderValue.setText(gender);
-
-    }
 
 }
