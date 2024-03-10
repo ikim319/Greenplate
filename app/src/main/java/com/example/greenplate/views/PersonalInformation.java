@@ -22,6 +22,7 @@ public class PersonalInformation extends AppCompatActivity {
 
     EditText editTextHeight, editTextWeight, editTextGender;
     private DatabaseReference rootDatabref;
+    FirebaseManager manager;
 
 
     @Override
@@ -41,6 +42,8 @@ public class PersonalInformation extends AppCompatActivity {
         Button buttonLog = findViewById(R.id.btn_Log);
 
         rootDatabref = FirebaseManager.getInstance().getRef().child("Users");
+        manager = FirebaseManager.getInstance();
+
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,48 +51,50 @@ public class PersonalInformation extends AppCompatActivity {
             }
         });
 
-    buttonHome.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(PersonalInformation.this, Home.class));
-        }
-    });
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PersonalInformation.this, Home.class));
+            }
+        });
 
-    buttonIngredients.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(PersonalInformation.this, Ingredients.class));
-        }
-    });
+        buttonIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PersonalInformation.this, Ingredients.class));
+            }
+        });
 
-    buttonInputMeal.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(PersonalInformation.this, InputMeal.class));
-        }
-    });
+        buttonInputMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PersonalInformation.this, InputMeal.class));
+            }
+        });
 
-    buttonRecipe.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-            // navigate to our login
-            startActivity(new Intent(PersonalInformation.this, Recipe.class));
-        }
-    });
+        buttonRecipe.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // navigate to our login
+                startActivity(new Intent(PersonalInformation.this, Recipe.class));
+            }
+        });
 
-    buttonShoppingList.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-            // navigate to our login
-            startActivity(new Intent(PersonalInformation.this, ShoppingList.class));
-        }
-    });
+        buttonShoppingList.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // navigate to our login
+                startActivity(new Intent(PersonalInformation.this, ShoppingList.class));
+            }
+        });
 
-    buttonBackWelcome.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(PersonalInformation.this, Login.class));
-        }
-    });
+        buttonBackWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PersonalInformation.this, Login.class));
+            }
+        });
     }
+
+
 
     private void savePersonalInfo() {
         String Height = editTextHeight.getText().toString();
@@ -97,9 +102,17 @@ public class PersonalInformation extends AppCompatActivity {
         String Gender = editTextGender.getText().toString();
 
         Users users = new Users(Height, Weight, Gender);
-        rootDatabref.push().setValue(users);
+        String userId = manager.getAuth().getCurrentUser().getUid();
+
+        DatabaseReference userRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(userId)
+                .child("Personal_Info");
+
+        userRef.setValue(users);
         Toast.makeText(PersonalInformation.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
+
 
 
 }

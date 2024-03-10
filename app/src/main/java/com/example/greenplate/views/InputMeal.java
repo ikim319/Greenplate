@@ -110,6 +110,9 @@ public class InputMeal extends AppCompatActivity {
 
         Toast.makeText(InputMeal.this, "Meal saved successfully!", Toast.LENGTH_SHORT).show();
     }
+/*    
+=======
+
 
 
 //        private AnyChartView chartView;
@@ -182,22 +185,22 @@ public class InputMeal extends AppCompatActivity {
 //            // Add more data entries...
 //            return data;
 //        }
-
+ */
 
 
     /*
     method for updating the height, weight, and gender displayed on InputMeal
     waiting for database integration to finish
      */
-        private void updateUserInfoTextViews (String height, String weight, String gender){
-            TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
-            TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
-            TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
+    private void updateUserInfoTextViews(String height, String weight, String gender) {
+        TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
+        TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
+        TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
 
-            textViewHeightValue.setText(height);
-            textViewWeightValue.setText(weight);
-            textViewGenderValue.setText(gender);
+        textViewHeightValue.setText(height);
+        textViewWeightValue.setText(weight);
+        textViewGenderValue.setText(gender);
 
-        }
     }
 
+}
