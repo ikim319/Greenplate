@@ -23,7 +23,6 @@ public class InputMeal extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
 
-
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(InputMeal.this, Home.class));
@@ -77,5 +76,6 @@ public class InputMeal extends AppCompatActivity {
         textViewHeightValue.setText(height);
         textViewWeightValue.setText(weight);
         textViewGenderValue.setText(gender);
+
     }
 }
