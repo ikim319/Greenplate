@@ -19,6 +19,7 @@ public class InputMeal extends AppCompatActivity {
 
 
     EditText editTextMeal, editTextCalories;
+    FirebaseManager manager;
     private DatabaseReference rootDatabref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +32,11 @@ public class InputMeal extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
         Button buttonLog = findViewById(R.id.btn_Log);
-
+        manager = FirebaseManager.getInstance();
         editTextMeal = findViewById(R.id.editTextMeal);
         editTextCalories = findViewById(R.id.editTextCalories);
 
-        rootDatabref = FirebaseDatabase.getInstance().getReference().child("Meal");
+        rootDatabref = manager.getRef().child("Meal");
 
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +87,22 @@ public class InputMeal extends AppCompatActivity {
     }
 
     private void saveMeal() {
-        String Meal = editTextMeal.getText().toString();
-        String Calories = editTextCalories.getText().toString();
+        String mealName = editTextMeal.getText().toString();
+        String calories = editTextCalories.getText().toString();
 
-        Meal meal = new Meal(Meal, Calories);
-        rootDatabref.push().setValue(meal);
-        Toast.makeText(InputMeal.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
+        String userId = manager.getAuth().getCurrentUser().getUid();
+
+        DatabaseReference userMealRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(userId)
+                .child("Meal_Log");
+
+        String mealId = userMealRef.push().getKey();
+
+        Meal meal = new Meal(mealName, calories);
+        userMealRef.child(mealId).setValue(meal);
+
+        Toast.makeText(InputMeal.this, "Meal saved successfully!", Toast.LENGTH_SHORT).show();
     }
 
 
