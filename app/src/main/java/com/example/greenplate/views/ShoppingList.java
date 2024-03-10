@@ -20,6 +20,7 @@ public class ShoppingList extends AppCompatActivity {
         Button buttonInputMeal = findViewById(R.id.btn_inputmeal);
         Button buttonRecipe = findViewById(R.id.Recipe);
         Button buttonBackWelcome = findViewById(R.id.Logout);
+        Button buttonPersonalInfo = findViewById(R.id.PInformation);
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -52,6 +53,13 @@ public class ShoppingList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ShoppingList.this, Login.class));
+            }
+        });
+
+        buttonPersonalInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ShoppingList.this, PersonalInformation.class));
             }
         });
     }

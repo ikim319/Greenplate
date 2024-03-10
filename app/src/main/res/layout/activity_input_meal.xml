@@ -7,20 +7,17 @@
     android:orientation="vertical"
     tools:context=".views.InputMeal">
 
-
     <Button
         android:id="@+id/btn_Home"
         android:layout_width="116dp"
         android:layout_height="94dp"
         android:text="@string/home" />
-
     <Button
         android:id="@+id/Recipe"
         android:layout_width="116dp"
         android:layout_height="94dp"
         android:layout_below="@id/btn_Home"
         android:text="@string/recipe" />
-
     <Button
         android:id="@+id/Ingredient"
         android:layout_width="wrap_content"
@@ -28,7 +25,6 @@
         android:layout_below="@+id/Recipe"
         android:layout_marginTop="2dp"
         android:text="@string/ingredients" />
-
     <Button
         android:id="@+id/shoppinglist"
         android:layout_width="wrap_content"
@@ -53,12 +49,104 @@
         android:id="@+id/Logout"
         android:layout_width="121dp"
         android:layout_height="70dp"
-        android:layout_below="@id/shoppinglist"
+        android:layout_below="@id/PInformation"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="388dp"
-        android:layout_marginEnd="292dp"
+        android:layout_marginTop="456dp"
+        android:layout_marginEnd="294dp"
         android:gravity="center"
         android:text="@string/logout" />
+
+    <Button
+        android:id="@+id/PInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shoppinglist"
+        android:text="@string/personal_info"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="294dp" />
+
+    <TextView
+        android:id="@+id/textViewInputMeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PInformation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-280dp"
+        android:text="Input Meal"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewAccountInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PInformation"
+        android:layout_marginTop="38dp"
+        android:layout_centerHorizontal="true"
+        android:text="User Information"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewAccountInfo"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="27dp"
+        android:text="Height: "
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewHeightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textViewHeight"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBaseline="@id/textViewHeight"
+        android:text=""
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textViewHeight"
+        android:text="Weight: "
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewWeightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textViewWeight"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBaseline="@id/textViewWeight"
+        android:text=""
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textViewWeight"
+        android:text="Gender: "
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewGenderValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@id/textViewGender"
+        android:layout_alignBaseline="@id/textViewGender"
+        android:text=""
+        android:textSize="16sp" />
+
 
 </RelativeLayout>
