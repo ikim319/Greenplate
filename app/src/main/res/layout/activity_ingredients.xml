@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Ingredients">
+    tools:context=".views.Ingredients">
 
     <Button
         android:id="@+id/btn_Home"
@@ -48,14 +48,24 @@
         android:textStyle="bold" />
 
     <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shoppinglist"
+        android:id="@+id/PInformation"
+        android:text="@string/personal_info"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="294dp" />
+
+    <Button
         android:id="@+id/Logout"
         android:layout_width="121dp"
         android:layout_height="70dp"
-        android:layout_below="@id/shoppinglist"
+        android:layout_below="@id/PInformation"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="388dp"
-        android:layout_marginEnd="292dp"
+        android:layout_marginTop="452dp"
+        android:layout_marginEnd="296dp"
         android:gravity="center"
         android:text="@string/logout" />
 
