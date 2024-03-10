@@ -91,6 +91,8 @@ public class PersonalInformation extends AppCompatActivity {
         });
     }
 
+
+
     private void savePersonalInfo() {
         String Height = editTextHeight.getText().toString();
         String Weight = editTextWeight.getText().toString();

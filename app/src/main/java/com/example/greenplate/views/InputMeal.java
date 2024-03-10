@@ -88,17 +88,9 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, PersonalInformation.class));
             }
         });
-
-    private void saveMeal() {
-        String Meal = editTextMeal.getText().toString();
-        String Calories = editTextCalories.getText().toString();
-
-        Meal meal = new Meal(Meal, Calories);
-        rootDatabref.push().setValue(meal);
-        Toast.makeText(InputMeal.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
 
-    
+/*    
 //        private AnyChartView chartView;
 //        private Button userVisualizationButton;
 //        private Button mealVisualizationButton;
@@ -169,7 +161,18 @@ public class InputMeal extends AppCompatActivity {
 //            // Add more data entries...
 //            return data;
 //        }
-//    }
+
+ */
+
+
+    private void saveMeal() {
+        String Meal = editTextMeal.getText().toString();
+        String Calories = editTextCalories.getText().toString();
+
+        Meal meal = new Meal(Meal, Calories);
+        rootDatabref.push().setValue(meal);
+        Toast.makeText(InputMeal.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
+    }
 
 
 
@@ -177,16 +180,14 @@ public class InputMeal extends AppCompatActivity {
     method for updating the height, weight, and gender displayed on InputMeal
     waiting for database integration to finish
      */
-        private void updateUserInfoTextViews (String height, String weight, String gender){
-            TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
-            TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
-            TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
+    private void updateUserInfoTextViews (String height, String weight, String gender){
+        TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
+        TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
+        TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
 
-            textViewHeightValue.setText(height);
-            textViewWeightValue.setText(weight);
-            textViewGenderValue.setText(gender);
+        textViewHeightValue.setText(height);
+        textViewWeightValue.setText(weight);
+        textViewGenderValue.setText(gender);
 
-        }
     }
-
 }
