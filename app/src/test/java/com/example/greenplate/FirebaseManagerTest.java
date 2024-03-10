@@ -17,16 +17,20 @@ public class FirebaseManagerTest {
 
     private FirebaseManager firebaseManager;
 
+    // initializes firebaseManager
     @Before
     public void setUp() {
         firebaseManager = FirebaseManager.getInstance();
     }
 
+    // tests whether firebaseManager is null or not after instantiation
     @Test
     public void testGetInstance() {
         assertNotNull(firebaseManager);
     }
 
+    // tests whether authentication instance obtained from firebaseManager.getAuth() is not null
+    // and matches the instance obtained directly from FirebaseAuth.getInstance()
     @Test
     public void testGetRef() {
         DatabaseReference databaseReference = firebaseManager.getRef();
@@ -34,6 +38,8 @@ public class FirebaseManagerTest {
         assertEquals(FirebaseDatabase.getInstance().getReference(), databaseReference);
     }
 
+    // mocks FirebaseManager class to return mocked instance when getInstance() is called
+    // tests whether two instances obtained by calling getInstance() are same (singleton?)
     @Test
     public void testGetAuth() {
         FirebaseAuth firebaseAuth = firebaseManager.getAuth();
