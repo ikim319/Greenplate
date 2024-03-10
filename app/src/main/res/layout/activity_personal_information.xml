@@ -7,6 +7,17 @@
     tools:context=".views.PersonalInformation">
 
     <Button
+        android:id="@+id/btn_Log"
+        android:layout_width="116dp"
+        android:layout_height="94dp"
+        android:layout_below="@id/editTextGender"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="-3dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/log" />
+
+    <Button
         android:id="@+id/btn_Home"
         android:layout_width="116dp"
         android:layout_height="94dp"
