@@ -22,6 +22,8 @@ public class Login extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin;
+
+    FirebaseManager manager;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
 
@@ -29,8 +31,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance();
+        manager = FirebaseManager.getInstance();
+        mAuth = manager.getAuth();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.btn_login);

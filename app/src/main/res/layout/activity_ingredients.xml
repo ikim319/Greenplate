@@ -5,58 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Ingredients">
+    tools:context=".views.Ingredients">
 
     <Button
         android:id="@+id/btn_Home"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:text="@string/home" />
-
     <Button
-        android:id="@+id/btn_inputmeal"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:id="@+id/PInformation"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@id/btn_Home"
-        android:text="@string/input_meal" />
-
-    <Button
-        android:id="@+id/Recipe"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_below="@id/btn_inputmeal"
-        android:text="@string/recipe" />
+        android:text="@string/personal_info" />
 
     <Button
         android:id="@+id/shoppinglist"
-        android:layout_width="wrap_content"
-        android:layout_height="94dp"
-        android:layout_below="@id/Recipe"
-        android:layout_alignParentEnd="true"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/PInformation"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="294dp"
         android:text="@string/shopping_list" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_below="@+id/btn_inputmeal"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="-9dp"
-        android:text="@string/ingredients_page"
-        android:textStyle="bold" />
-
+    <Button
+        android:id="@+id/Recipe"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/shoppinglist"
+        android:layout_marginTop="2dp"
+        android:text="@string/recipe" />
     <Button
         android:id="@+id/Logout"
-        android:layout_width="121dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/shoppinglist"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="388dp"
-        android:layout_marginEnd="292dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/btn_inputmeal"
         android:gravity="center"
         android:text="@string/logout" />
+
+    <Button
+        android:id="@+id/btn_inputmeal"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/Recipe"
+        android:text="@string/input_meal"
+        android:layout_marginTop="2dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PInformation"
+        android:layout_centerHorizontal="true"
+        android:text="@string/ingredients"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
