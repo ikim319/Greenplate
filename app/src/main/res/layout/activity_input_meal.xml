@@ -7,33 +7,48 @@
     android:orientation="vertical"
     tools:context=".views.InputMeal">
 
+
     <Button
         android:id="@+id/btn_Home"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:text="@string/home" />
     <Button
         android:id="@+id/Recipe"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@id/btn_Home"
         android:text="@string/recipe" />
+
     <Button
         android:id="@+id/Ingredient"
-        android:layout_width="wrap_content"
-        android:layout_height="102dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/Recipe"
         android:layout_marginTop="2dp"
         android:text="@string/ingredients" />
     <Button
         android:id="@+id/shoppinglist"
-        android:layout_width="wrap_content"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@id/Ingredient"
-        android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="294dp"
         android:text="@string/shopping_list" />
+    <Button
+        android:id="@+id/Logout"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/PInformation"
+        android:gravity="center"
+        android:text="@string/logout" />
+
+    <Button
+        android:id="@+id/PInformation"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/shoppinglist"
+        android:text="@string/personal_info"
+        android:layout_marginTop="2dp" />
 
     <EditText
         android:id="@+id/editTextMeal"
@@ -76,27 +91,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/Logout"
-        android:layout_width="121dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/PInformation"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="456dp"
-        android:layout_marginEnd="294dp"
-        android:gravity="center"
-        android:text="@string/logout" />
 
-    <Button
-        android:id="@+id/PInformation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/shoppinglist"
-        android:text="@string/personal_info"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="294dp" />
 
     <TextView
         android:id="@+id/textViewInputMeal"

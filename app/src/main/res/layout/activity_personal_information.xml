@@ -9,66 +9,57 @@
 
     <Button
         android:id="@+id/btn_Home"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:text="@string/home" />
-
-    <Button
-        android:id="@+id/btn_inputmeal"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_below="@id/btn_Home"
-        android:text="@string/input_meal" />
-
     <Button
         android:id="@+id/Recipe"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_below="@id/btn_inputmeal"
-        android:layout_marginTop="10dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/btn_Home"
         android:text="@string/recipe" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_below="@+id/btn_inputmeal"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="-60dp"
-        android:text="@string/personal_info"
-        android:textStyle="bold" />
 
     <Button
         android:id="@+id/Ingredient"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_below="@id/Recipe"
-        android:layout_marginTop="12dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/Recipe"
+        android:layout_marginTop="2dp"
         android:text="@string/ingredients" />
-
     <Button
         android:id="@+id/shoppinglist"
-        android:layout_width="wrap_content"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@id/Ingredient"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="289dp"
+        android:layout_marginTop="2dp"
         android:text="@string/shopping_list" />
-
     <Button
         android:id="@+id/Logout"
-        android:layout_width="121dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/shoppinglist"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="526dp"
-        android:layout_marginEnd="289dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/btn_inputmeal"
         android:gravity="center"
         android:text="@string/logout" />
 
+    <Button
+        android:id="@+id/btn_inputmeal"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/shoppinglist"
+        android:text="@string/input_meal"
+        android:layout_marginTop="2dp" />
+
     <!-- EditText for Height -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/Recipe"
+        android:layout_marginLeft="165dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-12dp"
+        android:text="@string/personal_info"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
     <EditText
         android:id="@+id/editTextHeight"
         android:layout_width="209dp"
