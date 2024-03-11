@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +20,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 //import com.anychart.AnyChart;
 //import com.anychart.AnyChartView;
@@ -48,6 +57,9 @@ public class InputMeal extends AppCompatActivity {
         TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
         TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
         TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
+        TextView textViewCalorieGoalValue = findViewById(R.id.textViewCalorieGoalValue);
+        TextView textViewTodayCaloriesValue = findViewById(R.id.textViewTodayCaloriesValue);
+
 
         manager = FirebaseManager.getInstance();
         editTextMeal = findViewById(R.id.editTextMeal);
@@ -71,11 +83,15 @@ public class InputMeal extends AppCompatActivity {
                 String height = dataSnapshot.child("height").getValue(String.class);
                 String weight = dataSnapshot.child("weight").getValue(String.class);
                 String gender = dataSnapshot.child("gender").getValue(String.class);
+                String calorieGoal = calorieCounter(height, weight, gender);
 
                 // Update the TextViews with the retrieved data
                 textViewHeightValue.setText(height);
                 textViewWeightValue.setText(weight);
                 textViewGenderValue.setText(gender);
+                textViewCalorieGoalValue.setText(calorieGoal);
+                fetchMealsForToday();
+
             }
 
             @Override
@@ -83,13 +99,17 @@ public class InputMeal extends AppCompatActivity {
                 textViewHeightValue.setText(R.string.error);
                 textViewWeightValue.setText(R.string.error);
                 textViewGenderValue.setText(R.string.error);
+                textViewTodayCaloriesValue.setText("0");
             }
         });
+
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveMeal();
+                fetchMealsForToday();
             }
+
         });
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -130,13 +150,20 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, PersonalInformation.class));
             }
         });
+
     }
 
     private void saveMeal() {
         String mealName = editTextMeal.getText().toString();
         String calories = editTextCalories.getText().toString();
+        Date currentDate = new Date();
 
         String userId = manager.getAuth().getCurrentUser().getUid();
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatabaseReference userMealRef = FirebaseManager.getInstance().getRef()
                 .child("Users")
@@ -144,12 +171,74 @@ public class InputMeal extends AppCompatActivity {
                 .child("Meal_Log");
 
         String mealId = userMealRef.push().getKey();
+        String formattedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
 
-        Meal meal = new Meal(mealName, calories);
+        Meal meal = new Meal(mealName, calories, formattedDate);
         userMealRef.child(mealId).setValue(meal);
 
         Toast.makeText(InputMeal.this, "Meal saved successfully!", Toast.LENGTH_SHORT).show();
     }
+
+    private void fetchMealsForToday() {
+        TextView textViewTodayCaloriesValue = findViewById(R.id.textViewTodayCaloriesValue);
+        String userId = manager.getAuth().getCurrentUser().getUid();
+
+        DatabaseReference userMealRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(userId)
+                .child("Meal_Log");
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        // Get current date
+        String formattedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
+
+        userMealRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int todayCalories = 0;
+                // Iterate through all meals
+                for (DataSnapshot mealSnapshot : dataSnapshot.getChildren()) {
+                    // Get the meal data
+                    String mealDate = mealSnapshot.child("date").getValue(String.class);
+                    String calories = mealSnapshot.child("calories").getValue(String.class);
+                    // Check if the meal date matches today's date
+                    if (mealDate != null && mealDate.equals(formattedDate)) {
+                        // Add the calories to the total for today
+                        todayCalories += Integer.parseInt(calories);
+                    }
+                }
+                // After calculating total calories, you can use it as needed
+                String totalCaloriesString = String.valueOf(todayCalories);
+                textViewTodayCaloriesValue.setText(totalCaloriesString);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors
+            }
+        });
+    }
+
+    private String calorieCounter(String height, String weight, String gender) {
+        int heightInt = Integer.parseInt(height);
+        int weightInt = Integer.parseInt(height);
+        int calorieGoal = 0;
+
+        if (gender.equals("Male")) {
+            calorieGoal = (int) (((6.23 * weightInt) + (12.7 * heightInt) + 66) * 1.55);
+        } else {
+            calorieGoal = (int) (((4.35 * weightInt) + (4.7 * heightInt) + 65) * 1.55);
+        }
+
+
+        return Integer.toString(calorieGoal);
+    }
+
+
 /*    
 =======
 

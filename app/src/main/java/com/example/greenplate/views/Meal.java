@@ -1,13 +1,16 @@
 package com.example.greenplate.views;
+import android.os.Build;
 
 public class Meal {
     String Meal;
-
+    String Date;
     String Calories;
-
-    public Meal(String meal, String calories) {
+    public Meal() {
+    }
+    public Meal(String meal, String calories, String Date) {
         Meal = meal;
         Calories = calories;
+        this.Date = Date;
     }
 
     public String getMeal() {
@@ -16,5 +19,9 @@ public class Meal {
 
     public String getCalories() {
         return Calories;
+    }
+
+    public String getDate() {
+        return Date;
     }
 }

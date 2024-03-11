@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Person;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
@@ -20,7 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class PersonalInformation extends AppCompatActivity {
 
-    EditText editTextHeight, editTextWeight, editTextGender;
+    EditText editTextHeight, editTextWeight;
+    Spinner spinnerGender;
     private DatabaseReference rootDatabref;
     FirebaseManager manager;
 
@@ -31,7 +34,14 @@ public class PersonalInformation extends AppCompatActivity {
         setContentView(R.layout.activity_personal_information);
         editTextHeight = findViewById(R.id.editTextHeight);
         editTextWeight = findViewById(R.id.editTextWeight);
-        editTextGender = findViewById(R.id.editTextGender);
+        spinnerGender = findViewById(R.id.spinnerGender);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.gender_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGender.setAdapter(adapter);
+        spinnerGender.setSelection(adapter.getPosition("Male"));
+
 
         Button buttonHome = findViewById(R.id.btn_Home);
         Button buttonIngredients = findViewById(R.id.Ingredient);
@@ -95,11 +105,16 @@ public class PersonalInformation extends AppCompatActivity {
     }
 
 
-
     private void savePersonalInfo() {
         String Height = editTextHeight.getText().toString();
         String Weight = editTextWeight.getText().toString();
-        String Gender = editTextGender.getText().toString();
+        String Gender;
+        if (spinnerGender != null) {
+            Gender = spinnerGender.getSelectedItem().toString();
+        } else {
+            Gender = "Male";
+        }
+
 
         Users users = new Users(Height, Weight, Gender);
         String userId = manager.getAuth().getCurrentUser().getUid();
