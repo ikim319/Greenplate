@@ -1,7 +1,12 @@
 package com.example.greenplate.views;
+import com.example.greenplate.model.Meal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
+import java.util.Locale;
+
 public class FirebaseManager {
         private static FirebaseManager instance;
         private DatabaseReference rootDatabaseRef;
@@ -26,5 +31,4 @@ public class FirebaseManager {
         public FirebaseAuth getAuth() {
             return mAuth;
         }
-
 }

@@ -4,27 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.greenplate.model.Meal;
+import com.example.greenplate.viewModels.InputMealViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -185,7 +178,6 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, PersonalInformation.class));
             }
         });
-
     }
 
     private void saveMeal() {
@@ -258,35 +250,13 @@ public class InputMeal extends AppCompatActivity {
         });
     }
 
-    private String calorieCounter(String height, String weight, String gender) {
-        // Check if any of the parameters are null
-        if (height == null || weight == null || gender == null) {
-            return "N/A"; // or any other default value or error message
-        }
-
-        int heightInt;
-        int weightInt;
-        try {
-            heightInt = Integer.parseInt(height);
-            weightInt = Integer.parseInt(weight);
-        } catch (NumberFormatException e) {
-            // Handle the case where height or weight cannot be parsed to integers
-            return "N/A"; // or any other default value or error message
-        }
-
-        int calorieGoal = 0;
-
-        if (gender.equals("Male")) {
-            calorieGoal = (int) (((6.23 * weightInt) + (12.7 * heightInt) + 66) * 1.55);
-        } else {
-            calorieGoal = (int) (((4.35 * weightInt) + (4.7 * heightInt) + 65) * 1.55);
-        }
-
-        return Integer.toString(calorieGoal);
+    public String calorieCounter(String height, String weight, String gender) {
+        InputMealViewModel inputView = new InputMealViewModel();
+        return inputView.calorieCounter(height, weight, gender);
     }
 
 
-/*    
+/*
 =======
 
 
