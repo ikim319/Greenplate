@@ -57,4 +57,37 @@ public class InputMealTest {
 
         assertEquals("Calorie calculation for Non-numeric input should return N/A", "N/A", result);
     }
+
+    // Test case for verifying calorie calculation when all inputs are empty
+    @Test
+    public void testCalorieCounter_AllInputsEmpty() {
+        InputMealViewModel viewModel = new InputMealViewModel();
+        String height = "";
+        String weight = "";
+        String gender = "";
+        String result = viewModel.calorieCounter(height, weight, gender);
+        assertEquals("Calorie calculation for all empty inputs should return N/A", "N/A", "N/A");
+    }
+
+    // Test case for verifying calorie calculation when all inputs are strings with spaces
+    @Test
+    public void testCalorieCounter_AllInputsEmptySpaces() {
+        InputMealViewModel viewModel = new InputMealViewModel();
+        String height = "      ";
+        String weight = "      ";
+        String gender = "      ";
+        String result = viewModel.calorieCounter(height, weight, gender);
+        assertEquals("Calorie calculation for all empty inputs should return N/A", "N/A", "N/A");
+    }
+
+    // Test case for verifying calorie calculation when weight and height are negative
+    @Test
+    public void testCalorieCounter_NegativeWeight() {
+        InputMealViewModel viewModel = new InputMealViewModel();
+        String height = "-68";
+        String weight = "-135";
+        String gender = "Male";
+        String result = viewModel.calorieCounter(height, weight, gender);
+        assertEquals("Calorie calculation for negative weight should return N/A", "N/A", result);
+    }
 }
