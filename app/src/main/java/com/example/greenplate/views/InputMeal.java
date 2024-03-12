@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
@@ -17,16 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.greenplate.model.Meal;
+import com.example.greenplate.viewModels.InputMealViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -59,10 +54,23 @@ public class InputMeal extends AppCompatActivity {
         Button buttonTodayIntake = findViewById(R.id.today_intake);
 
         TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
+        TextView textViewHeight = findViewById(R.id.textViewHeight);
+        TextView textViewWeight = findViewById(R.id.textViewWeight);
+        TextView textViewGender = findViewById(R.id.textViewGender);
+
         TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
         TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
         TextView textViewCalorieGoalValue = findViewById(R.id.textViewCalorieGoalValue);
+        TextView textViewCalorieGoal = findViewById(R.id.textViewCalorieGoal);
+
         TextView textViewTodayCaloriesValue = findViewById(R.id.textViewTodayCaloriesValue);
+        TextView textViewTodayCalories = findViewById(R.id.textViewTodayCalories);
+
+        TextView inputInfoTextView = findViewById(R.id.inputInfoTextView);
+        TextView textViewAccountInfo = findViewById(R.id.textViewAccountInfo);
+        inputInfoTextView.setVisibility(View.GONE);
+
+
 
 
         manager = FirebaseManager.getInstance();
@@ -74,36 +82,51 @@ public class InputMeal extends AppCompatActivity {
 
         String userId = manager.getAuth().getCurrentUser().getUid();
 
-        // Initialize Firebase Database reference for the user's data
         userDatabref = manager.getRef().child("Users").child(userId).child("Personal_Info");
 
-        // Attach a ValueEventListener to read data from Firebase
         userDatabref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again whenever data at this location is updated
 
-                // Retrieve the data from the dataSnapshot
                 String height = dataSnapshot.child("height").getValue(String.class);
                 String weight = dataSnapshot.child("weight").getValue(String.class);
                 String gender = dataSnapshot.child("gender").getValue(String.class);
                 String calorieGoal = calorieCounter(height, weight, gender);
 
-                // Update the TextViews with the retrieved data
-                textViewHeightValue.setText(height);
-                textViewWeightValue.setText(weight);
-                textViewGenderValue.setText(gender);
-                textViewCalorieGoalValue.setText(calorieGoal);
-                fetchMealsForToday();
+                if (height == null || weight == null || gender == null) {
+
+                    textViewHeightValue.setVisibility(View.GONE);
+                    textViewWeightValue.setVisibility(View.GONE);
+                    textViewGenderValue.setVisibility(View.GONE);
+                    textViewHeight.setVisibility(View.GONE);
+                    textViewWeight.setVisibility(View.GONE);
+                    textViewGender.setVisibility(View.GONE);
+                    textViewCalorieGoal.setVisibility(View.GONE);
+                    textViewAccountInfo.setVisibility(View.GONE);
+                    textViewTodayCalories.setVisibility(View.GONE);
+                    inputInfoTextView.setVisibility(View.VISIBLE);
+                } else {
+                    textViewCalorieGoal.setVisibility(View.VISIBLE);
+                    textViewAccountInfo.setVisibility(View.VISIBLE);
+                    textViewTodayCalories.setVisibility(View.VISIBLE);
+                    textViewHeightValue.setVisibility(View.VISIBLE);
+                    textViewWeightValue.setVisibility(View.VISIBLE);
+                    textViewGenderValue.setVisibility(View.VISIBLE);
+                    textViewHeight.setVisibility(View.VISIBLE);
+                    textViewWeight.setVisibility(View.VISIBLE);
+                    textViewGender.setVisibility(View.VISIBLE);
+                    textViewHeightValue.setText(height);
+                    textViewWeightValue.setText(weight);
+                    textViewGenderValue.setText(gender);
+                    textViewCalorieGoalValue.setText(calorieGoal);
+                    fetchMealsForToday();
+                }
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                textViewHeightValue.setText(R.string.error);
-                textViewWeightValue.setText(R.string.error);
-                textViewGenderValue.setText(R.string.error);
-                textViewTodayCaloriesValue.setText("0");
+
             }
         });
 
@@ -139,20 +162,17 @@ public class InputMeal extends AppCompatActivity {
         });
         buttonRecipe.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // navigate to our login
                 startActivity(new Intent(InputMeal.this, Recipe.class));
             }
         });
         buttonShoppingList.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // navigate to our login
                 startActivity(new Intent(InputMeal.this, ShoppingList.class));
             }
         });
 
         buttonIngredients.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // navigate to our login
                 startActivity(new Intent(InputMeal.this, Ingredients.class));
             }
         });
@@ -170,7 +190,6 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, PersonalInformation.class));
             }
         });
-
     }
 
     private void saveMeal() {
@@ -212,7 +231,6 @@ public class InputMeal extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        // Get current date
         String formattedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
 
         userMealRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -237,11 +255,13 @@ public class InputMeal extends AppCompatActivity {
                 String todayCaloriesString = String.valueOf(todayCalories);
                 todaysCalories = todayCalories;
                 textViewTodayCaloriesValue.setText(todayCaloriesString);
+                String totalCaloriesString = String.valueOf(todayCalories);
+                textViewTodayCaloriesValue.setText(totalCaloriesString);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
+                textViewTodayCaloriesValue.setText("N/A");
             }
         });
     }
@@ -265,82 +285,8 @@ public class InputMeal extends AppCompatActivity {
         caloricGoal = calorieGoal;
         return Integer.toString(calorieGoal);
     }
-
-
-
-
-
-
-      //  private AnyChartView chartView;
-//        private Button userVisualizationButton;
-//        private Button mealVisualizationButton;
-//
-//        @Override
-//        protected void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            setContentView(R.layout.activity_input_meal);
-//
-//            chartView = findViewById(R.id.chart_view);
-//            userVisualizationButton = findViewById(R.id.user_visualization_button);
-//            mealVisualizationButton = findViewById(R.id.meal_visualization_button);
-//
-//            userVisualizationButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Generate and display user visualization
-//                    displayUserVisualization();
-//                }
-//            });
-//            mealVisualizationButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Generate and display meal database visualization
-//                    displayMealVisualization();
-//                }
-//            });
-//        }
-//
-//        private void displayUserVisualization() {
-//            // Fetch user data and create visualization using AnyChart
-//            // For example, create a bar chart showing daily caloric intake over the past month
-//            AnyChart.columnChart()
-//                    .data(generateUserData())
-//                    .title("Daily Caloric Intake")
-//                    .xAxisTitle("Date")
-//                    .yAxisTitle("Calories")
-//                    .render(chartView);
-//
-//            private void displayMealVisualization() {
-//                // Fetch meal database data and create visualization using AnyChart
-//            }
-//            // For example, create a pie chart showing distribution of meal types
-//            AnyChart.pieChart()
-//                    .data(generateMealData())
-//                    .title("Meal Distribution")
-//                    .render(chartView);
-//        }
-//
-//        private List<DataEntry> generateUserData() {
-//            // Generate dummy user data for demonstration
-//            List<DataEntry> data = new ArrayList<>();
-//            // Add data entries for each day's caloric intake
-//            // You would fetch this data from the user database
-//            data.add(new ValueDataEntry("Day 1", 2000));
-//            data.add(new ValueDataEntry("Day 2", 1800));
-//            // Add more data entries...
-//            return data;
-//        }
-//
-//        private List<DataEntry> generateMealData() {
-//            // Generate dummy meal data for demonstration
-//            List<DataEntry> data = new ArrayList<>();
-//            // Add data entries for meal types and their frequency
-//            // You would fetch this data from the meal database
-//            data.add(new ValueDataEntry("Breakfast", 3));
-//            data.add(new ValueDataEntry("Lunch", 5));
-//            // Add more data entries...
-//            return data;
-//        }
-
-
+    public String calorieCounter(String height, String weight, String gender) {
+        InputMealViewModel inputView = new InputMealViewModel();
+        return inputView.calorieCounter(height, weight, gender);
+    }
 }

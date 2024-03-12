@@ -1,4 +1,4 @@
-package com.example.greenplate.views;
+package com.example.greenplate.model;
 import android.os.Build;
 
 public class Meal {

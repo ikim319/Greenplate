@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/input_meal"
     tools:context=".views.InputMeal">
 
 
@@ -62,6 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -231,6 +233,15 @@
         android:layout_marginLeft="10dp"
         android:text=""
         android:textSize="18sp" />
+    <TextView
+        android:id="@+id/inputInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please Input Personal Information"
+        android:layout_below="@id/Logout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"/>
 
 
 
