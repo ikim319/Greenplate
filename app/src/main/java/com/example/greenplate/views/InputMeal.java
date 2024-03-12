@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,10 +56,23 @@ public class InputMeal extends AppCompatActivity {
         Button buttonLog = findViewById(R.id.btn_Log);
 
         TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
+        TextView textViewHeight = findViewById(R.id.textViewHeight);
+        TextView textViewWeight = findViewById(R.id.textViewWeight);
+        TextView textViewGender = findViewById(R.id.textViewGender);
+
         TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
         TextView textViewGenderValue = findViewById(R.id.textViewGenderValue);
         TextView textViewCalorieGoalValue = findViewById(R.id.textViewCalorieGoalValue);
+        TextView textViewCalorieGoal = findViewById(R.id.textViewCalorieGoal);
+
         TextView textViewTodayCaloriesValue = findViewById(R.id.textViewTodayCaloriesValue);
+        TextView textViewTodayCalories = findViewById(R.id.textViewTodayCalories);
+
+        TextView inputInfoTextView = findViewById(R.id.inputInfoTextView);
+        TextView textViewAccountInfo = findViewById(R.id.textViewAccountInfo);
+        inputInfoTextView.setVisibility(View.GONE);
+
+
 
 
         manager = FirebaseManager.getInstance();
@@ -85,21 +99,42 @@ public class InputMeal extends AppCompatActivity {
                 String gender = dataSnapshot.child("gender").getValue(String.class);
                 String calorieGoal = calorieCounter(height, weight, gender);
 
-                // Update the TextViews with the retrieved data
-                textViewHeightValue.setText(height);
-                textViewWeightValue.setText(weight);
-                textViewGenderValue.setText(gender);
-                textViewCalorieGoalValue.setText(calorieGoal);
-                fetchMealsForToday();
+                if (height == null || weight == null || gender == null) {
+
+                    textViewHeightValue.setVisibility(View.GONE);
+                    textViewWeightValue.setVisibility(View.GONE);
+                    textViewGenderValue.setVisibility(View.GONE);
+                    textViewHeight.setVisibility(View.GONE);
+                    textViewWeight.setVisibility(View.GONE);
+                    textViewGender.setVisibility(View.GONE);
+                    textViewCalorieGoal.setVisibility(View.GONE);
+                    textViewAccountInfo.setVisibility(View.GONE);
+                    textViewTodayCalories.setVisibility(View.GONE);
+                    // Add the TextView in place of TextViews
+                    inputInfoTextView.setVisibility(View.VISIBLE);
+                } else {
+                    // Update the TextViews with the retrieved data
+                    textViewCalorieGoal.setVisibility(View.VISIBLE);
+                    textViewAccountInfo.setVisibility(View.VISIBLE);
+                    textViewTodayCalories.setVisibility(View.VISIBLE);
+                    textViewHeightValue.setVisibility(View.VISIBLE);
+                    textViewWeightValue.setVisibility(View.VISIBLE);
+                    textViewGenderValue.setVisibility(View.VISIBLE);
+                    textViewHeight.setVisibility(View.VISIBLE);
+                    textViewWeight.setVisibility(View.VISIBLE);
+                    textViewGender.setVisibility(View.VISIBLE);
+                    textViewHeightValue.setText(height);
+                    textViewWeightValue.setText(weight);
+                    textViewGenderValue.setText(gender);
+                    textViewCalorieGoalValue.setText(calorieGoal);
+                    fetchMealsForToday();
+                }
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                textViewHeightValue.setText(R.string.error);
-                textViewWeightValue.setText(R.string.error);
-                textViewGenderValue.setText(R.string.error);
-                textViewTodayCaloriesValue.setText("0");
+
             }
         });
 
@@ -224,8 +259,21 @@ public class InputMeal extends AppCompatActivity {
     }
 
     private String calorieCounter(String height, String weight, String gender) {
-        int heightInt = Integer.parseInt(height);
-        int weightInt = Integer.parseInt(height);
+        // Check if any of the parameters are null
+        if (height == null || weight == null || gender == null) {
+            return "N/A"; // or any other default value or error message
+        }
+
+        int heightInt;
+        int weightInt;
+        try {
+            heightInt = Integer.parseInt(height);
+            weightInt = Integer.parseInt(weight);
+        } catch (NumberFormatException e) {
+            // Handle the case where height or weight cannot be parsed to integers
+            return "N/A"; // or any other default value or error message
+        }
+
         int calorieGoal = 0;
 
         if (gender.equals("Male")) {
@@ -233,7 +281,6 @@ public class InputMeal extends AppCompatActivity {
         } else {
             calorieGoal = (int) (((4.35 * weightInt) + (4.7 * heightInt) + 65) * 1.55);
         }
-
 
         return Integer.toString(calorieGoal);
     }
