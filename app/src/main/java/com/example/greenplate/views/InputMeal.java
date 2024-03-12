@@ -91,7 +91,7 @@ public class InputMeal extends AppCompatActivity {
                 String height = dataSnapshot.child("height").getValue(String.class);
                 String weight = dataSnapshot.child("weight").getValue(String.class);
                 String gender = dataSnapshot.child("gender").getValue(String.class);
-                String calorieGoal = calorieCounter(height, weight, gender);
+                String calorieGoal = calorieCounter2(height, weight, gender);
 
                 if (height == null || weight == null || gender == null) {
 
@@ -266,7 +266,7 @@ public class InputMeal extends AppCompatActivity {
         });
     }
 
-    private String calorieCounter(String height, String weight, String gender) {
+    private String calorieCounter2(String height, String weight, String gender) {
         int heightInt = 0;
         if (height != null && !height.isEmpty()) {
             heightInt = Integer.parseInt(height);
@@ -285,7 +285,7 @@ public class InputMeal extends AppCompatActivity {
         caloricGoal = calorieGoal;
         return Integer.toString(calorieGoal);
     }
-    public String calorieCounter2(String height, String weight, String gender) {
+    public String calorieCounter(String height, String weight, String gender) {
         InputMealViewModel inputView = new InputMealViewModel();
         return inputView.calorieCounter(height, weight, gender);
     }
