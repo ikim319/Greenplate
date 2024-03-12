@@ -59,5 +59,29 @@ public class FirebaseManagerTest {
         assertEquals(mockedInstance, instance1);
         assertEquals(instance1, instance2);
     }
+
+    // Test to verify that the FirebaseManager initializes the Firebase database reference correctly
+    @Test
+    public void testInitializeFirebaseDatabaseReference() {
+        DatabaseReference reference = firebaseManager.getRef();
+        assertNotNull(reference);
+        assertEquals(FirebaseDatabase.getInstance().getReference(), reference);
+    }
+
+    // Test to verify that the FirebaseManager retrieves the correct authentication instance
+    @Test
+    public void testGetFirebaseAuthInstance() {
+        FirebaseAuth auth = firebaseManager.getAuth();
+        assertNotNull(auth);
+        assertEquals(FirebaseAuth.getInstance(), auth);
+    }
+
+    // Test to verify that the FirebaseManager returns the same instance when calling getInstance() multiple times
+    @Test
+    public void testFirebaseManagerSingleton() {
+        FirebaseManager instance1 = FirebaseManager.getInstance();
+        FirebaseManager instance2 = FirebaseManager.getInstance();
+        assertEquals(instance1, instance2);
+    }
 }
 
