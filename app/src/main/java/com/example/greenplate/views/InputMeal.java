@@ -285,7 +285,7 @@ public class InputMeal extends AppCompatActivity {
         caloricGoal = calorieGoal;
         return Integer.toString(calorieGoal);
     }
-    public String calorieCounter(String height, String weight, String gender) {
+    public String calorieCounter2(String height, String weight, String gender) {
         InputMealViewModel inputView = new InputMealViewModel();
         return inputView.calorieCounter(height, weight, gender);
     }
