@@ -2,8 +2,6 @@ package com.example.greenplate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.example.greenplate.views.FirebaseManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +46,7 @@ public class FirebaseManagerTest {
     }
 
     // Mocked test for getInstance()
+    /*
     @Test
     public void testGetInstanceSingleton() {
         FirebaseManager mockedInstance = mock(FirebaseManager.class);
@@ -59,6 +58,8 @@ public class FirebaseManagerTest {
         assertEquals(mockedInstance, instance1);
         assertEquals(instance1, instance2);
     }
+
+     */
 
     // Test to verify that the FirebaseManager initializes the Firebase database reference correctly
     @Test

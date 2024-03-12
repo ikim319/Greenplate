@@ -4,27 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.greenplate.model.Meal;
+import com.example.greenplate.viewModels.InputMealViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -84,16 +77,12 @@ public class InputMeal extends AppCompatActivity {
 
         String userId = manager.getAuth().getCurrentUser().getUid();
 
-        // Initialize Firebase Database reference for the user's data
         userDatabref = manager.getRef().child("Users").child(userId).child("Personal_Info");
 
-        // Attach a ValueEventListener to read data from Firebase
         userDatabref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again whenever data at this location is updated
 
-                // Retrieve the data from the dataSnapshot
                 String height = dataSnapshot.child("height").getValue(String.class);
                 String weight = dataSnapshot.child("weight").getValue(String.class);
                 String gender = dataSnapshot.child("gender").getValue(String.class);
@@ -110,10 +99,8 @@ public class InputMeal extends AppCompatActivity {
                     textViewCalorieGoal.setVisibility(View.GONE);
                     textViewAccountInfo.setVisibility(View.GONE);
                     textViewTodayCalories.setVisibility(View.GONE);
-                    // Add the TextView in place of TextViews
                     inputInfoTextView.setVisibility(View.VISIBLE);
                 } else {
-                    // Update the TextViews with the retrieved data
                     textViewCalorieGoal.setVisibility(View.VISIBLE);
                     textViewAccountInfo.setVisibility(View.VISIBLE);
                     textViewTodayCalories.setVisibility(View.VISIBLE);
@@ -154,20 +141,17 @@ public class InputMeal extends AppCompatActivity {
         });
         buttonRecipe.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // navigate to our login
                 startActivity(new Intent(InputMeal.this, Recipe.class));
             }
         });
         buttonShoppingList.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // navigate to our login
                 startActivity(new Intent(InputMeal.this, ShoppingList.class));
             }
         });
 
         buttonIngredients.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // navigate to our login
                 startActivity(new Intent(InputMeal.this, Ingredients.class));
             }
         });
@@ -185,7 +169,6 @@ public class InputMeal extends AppCompatActivity {
                 startActivity(new Intent(InputMeal.this, PersonalInformation.class));
             }
         });
-
     }
 
     private void saveMeal() {
@@ -227,7 +210,6 @@ public class InputMeal extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        // Get current date
         String formattedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
 
         userMealRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -246,47 +228,24 @@ public class InputMeal extends AppCompatActivity {
                         todayCalories += Integer.parseInt(calories);
                     }
                 }
-                // After calculating total calories, you can use it as needed
                 String totalCaloriesString = String.valueOf(todayCalories);
                 textViewTodayCaloriesValue.setText(totalCaloriesString);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
+                textViewTodayCaloriesValue.setText("N/A");
             }
         });
     }
 
-    private String calorieCounter(String height, String weight, String gender) {
-        // Check if any of the parameters are null
-        if (height == null || weight == null || gender == null) {
-            return "N/A"; // or any other default value or error message
-        }
-
-        int heightInt;
-        int weightInt;
-        try {
-            heightInt = Integer.parseInt(height);
-            weightInt = Integer.parseInt(weight);
-        } catch (NumberFormatException e) {
-            // Handle the case where height or weight cannot be parsed to integers
-            return "N/A"; // or any other default value or error message
-        }
-
-        int calorieGoal = 0;
-
-        if (gender.equals("Male")) {
-            calorieGoal = (int) (((6.23 * weightInt) + (12.7 * heightInt) + 66) * 1.55);
-        } else {
-            calorieGoal = (int) (((4.35 * weightInt) + (4.7 * heightInt) + 65) * 1.55);
-        }
-
-        return Integer.toString(calorieGoal);
+    public String calorieCounter(String height, String weight, String gender) {
+        InputMealViewModel inputView = new InputMealViewModel();
+        return inputView.calorieCounter(height, weight, gender);
     }
 
 
-/*    
+/*
 =======
 
 
