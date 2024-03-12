@@ -1,11 +1,14 @@
 package com.example.greenplate.views;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,11 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-//import com.anychart.AnyChart;
-//import com.anychart.AnyChartView;
-//import com.anychart.chart.common.dataentry.DataEntry;
-//import com.anychart.chart.common.dataentry.ValueDataEntry;
-//import java.util.ArrayList;
+
 public class InputMeal extends AppCompatActivity {
 
 
@@ -41,6 +40,9 @@ public class InputMeal extends AppCompatActivity {
     FirebaseManager manager;
     private DatabaseReference rootDatabref;
     private DatabaseReference userDatabref;
+
+    public static int todaysCalories;
+    public static int caloricGoal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class InputMeal extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
         Button buttonLog = findViewById(R.id.btn_Log);
+        Button buttonCaloriesVsTime = findViewById(R.id.calories_vs_time);
+        Button buttonTodayIntake = findViewById(R.id.today_intake);
 
         TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
         TextView textViewWeightValue = findViewById(R.id.textViewWeightValue);
@@ -108,6 +112,22 @@ public class InputMeal extends AppCompatActivity {
             public void onClick(View v) {
                 saveMeal();
                 fetchMealsForToday();
+            }
+
+        });
+
+        buttonCaloriesVsTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InputMeal.this, CaloriesVsTime.class));
+            }
+
+        });
+
+        buttonTodayIntake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InputMeal.this, TodayIntake.class));
             }
 
         });
@@ -208,12 +228,15 @@ public class InputMeal extends AppCompatActivity {
                     // Check if the meal date matches today's date
                     if (mealDate != null && mealDate.equals(formattedDate)) {
                         // Add the calories to the total for today
-                        todayCalories += Integer.parseInt(calories);
+                        if (calories != null && !calories.isEmpty()) {
+                            todayCalories += Integer.parseInt(calories);
+                        }
                     }
                 }
                 // After calculating total calories, you can use it as needed
-                String totalCaloriesString = String.valueOf(todayCalories);
-                textViewTodayCaloriesValue.setText(totalCaloriesString);
+                String todayCaloriesString = String.valueOf(todayCalories);
+                todaysCalories = todayCalories;
+                textViewTodayCaloriesValue.setText(todayCaloriesString);
             }
 
             @Override
@@ -224,27 +247,31 @@ public class InputMeal extends AppCompatActivity {
     }
 
     private String calorieCounter(String height, String weight, String gender) {
-        int heightInt = Integer.parseInt(height);
-        int weightInt = Integer.parseInt(height);
+        int heightInt = 0;
+        if (height != null && !height.isEmpty()) {
+            heightInt = Integer.parseInt(height);
+        }
+        int weightInt = 0;
+        if (weight != null && !weight.isEmpty()) {
+            weightInt = (int) Integer.parseInt(weight);
+        }
         int calorieGoal = 0;
 
-        if (gender.equals("Male")) {
+        if (gender != null && gender.equals("Male")) {
             calorieGoal = (int) (((6.23 * weightInt) + (12.7 * heightInt) + 66) * 1.55);
         } else {
             calorieGoal = (int) (((4.35 * weightInt) + (4.7 * heightInt) + 65) * 1.55);
         }
-
-
+        caloricGoal = calorieGoal;
         return Integer.toString(calorieGoal);
     }
 
 
-/*    
-=======
 
 
 
-//        private AnyChartView chartView;
+
+      //  private AnyChartView chartView;
 //        private Button userVisualizationButton;
 //        private Button mealVisualizationButton;
 //
@@ -314,6 +341,6 @@ public class InputMeal extends AppCompatActivity {
 //            // Add more data entries...
 //            return data;
 //        }
- */
+
 
 }
