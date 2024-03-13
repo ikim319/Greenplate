@@ -35,5 +35,8 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string name="title_activity_calories_vs_time">CaloriesVsTime</string>
+    <string name="open_calories_vs_time">Open Calories Vs Time</string>
+    <string name="calories_vs_time">Calories vs Time</string>
 
 </resources>
