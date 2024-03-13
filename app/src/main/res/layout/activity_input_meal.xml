@@ -91,6 +91,26 @@
             app:layout_constraintStart_toStartOf="@id/editTextCalories"
             app:layout_constraintEnd_toEndOf="@id/editTextCalories" />
 
+        <Button
+            android:id="@+id/calories_vs_time"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:text="@string/calories_vs_time"
+            app:layout_constraintEnd_toEndOf="@id/editTextCalories"
+            app:layout_constraintStart_toStartOf="@id/editTextCalories"
+            app:layout_constraintTop_toBottomOf="@id/editTextCalories" />
+
+        <Button
+            android:id="@+id/today_intake"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="136dp"
+            android:text="Today's Intake"
+            app:layout_constraintEnd_toEndOf="@id/editTextCalories"
+            app:layout_constraintStart_toStartOf="@id/editTextCalories"
+            app:layout_constraintTop_toBottomOf="@id/editTextCalories" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -222,6 +242,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:textStyle="bold"/>
+
 
 
 

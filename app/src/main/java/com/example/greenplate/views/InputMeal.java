@@ -1,10 +1,14 @@
 package com.example.greenplate.views;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,11 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-//import com.anychart.AnyChart;
-//import com.anychart.AnyChartView;
-//import com.anychart.chart.common.dataentry.DataEntry;
-//import com.anychart.chart.common.dataentry.ValueDataEntry;
-//import java.util.ArrayList;
+
 public class InputMeal extends AppCompatActivity {
 
 
@@ -35,6 +35,9 @@ public class InputMeal extends AppCompatActivity {
     FirebaseManager manager;
     private DatabaseReference rootDatabref;
     private DatabaseReference userDatabref;
+
+    public static int todaysCalories;
+    public static int caloricGoal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class InputMeal extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
         Button buttonLog = findViewById(R.id.btn_Log);
+        Button buttonCaloriesVsTime = findViewById(R.id.calories_vs_time);
+        Button buttonTodayIntake = findViewById(R.id.today_intake);
 
         TextView textViewHeightValue = findViewById(R.id.textViewHeightValue);
         TextView textViewHeight = findViewById(R.id.textViewHeight);
@@ -64,6 +69,7 @@ public class InputMeal extends AppCompatActivity {
         TextView inputInfoTextView = findViewById(R.id.inputInfoTextView);
         TextView textViewAccountInfo = findViewById(R.id.textViewAccountInfo);
         inputInfoTextView.setVisibility(View.GONE);
+
 
 
 
@@ -130,6 +136,22 @@ public class InputMeal extends AppCompatActivity {
             public void onClick(View v) {
                 saveMeal();
                 fetchMealsForToday();
+            }
+
+        });
+
+        buttonCaloriesVsTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InputMeal.this, CaloriesVsTime.class));
+            }
+
+        });
+
+        buttonTodayIntake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InputMeal.this, TodayIntake.class));
             }
 
         });
@@ -225,9 +247,15 @@ public class InputMeal extends AppCompatActivity {
                     // Check if the meal date matches today's date
                     if (mealDate != null && mealDate.equals(formattedDate)) {
                         // Add the calories to the total for today
-                        todayCalories += Integer.parseInt(calories);
+                        if (calories != null && !calories.isEmpty()) {
+                            todayCalories += Integer.parseInt(calories);
+                        }
                     }
                 }
+                // After calculating total calories, you can use it as needed
+                String todayCaloriesString = String.valueOf(todayCalories);
+                todaysCalories = todayCalories;
+                textViewTodayCaloriesValue.setText(todayCaloriesString);
                 String totalCaloriesString = String.valueOf(todayCalories);
                 textViewTodayCaloriesValue.setText(totalCaloriesString);
             }
@@ -239,87 +267,15 @@ public class InputMeal extends AppCompatActivity {
         });
     }
 
+
     public String calorieCounter(String height, String weight, String gender) {
         InputMealViewModel inputView = new InputMealViewModel();
+        String calorieGoal = inputView.calorieCounter(height, weight, gender);
+        try {
+            caloricGoal = Integer.parseInt(calorieGoal);
+        } catch (NumberFormatException e) {
+            caloricGoal = 0; // Default value
+        }
         return inputView.calorieCounter(height, weight, gender);
     }
-
-
-/*
-=======
-
-
-
-//        private AnyChartView chartView;
-//        private Button userVisualizationButton;
-//        private Button mealVisualizationButton;
-//
-//        @Override
-//        protected void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            setContentView(R.layout.activity_input_meal);
-//
-//            chartView = findViewById(R.id.chart_view);
-//            userVisualizationButton = findViewById(R.id.user_visualization_button);
-//            mealVisualizationButton = findViewById(R.id.meal_visualization_button);
-//
-//            userVisualizationButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Generate and display user visualization
-//                    displayUserVisualization();
-//                }
-//            });
-//            mealVisualizationButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // Generate and display meal database visualization
-//                    displayMealVisualization();
-//                }
-//            });
-//        }
-//
-//        private void displayUserVisualization() {
-//            // Fetch user data and create visualization using AnyChart
-//            // For example, create a bar chart showing daily caloric intake over the past month
-//            AnyChart.columnChart()
-//                    .data(generateUserData())
-//                    .title("Daily Caloric Intake")
-//                    .xAxisTitle("Date")
-//                    .yAxisTitle("Calories")
-//                    .render(chartView);
-//
-//            private void displayMealVisualization() {
-//                // Fetch meal database data and create visualization using AnyChart
-//            }
-//            // For example, create a pie chart showing distribution of meal types
-//            AnyChart.pieChart()
-//                    .data(generateMealData())
-//                    .title("Meal Distribution")
-//                    .render(chartView);
-//        }
-//
-//        private List<DataEntry> generateUserData() {
-//            // Generate dummy user data for demonstration
-//            List<DataEntry> data = new ArrayList<>();
-//            // Add data entries for each day's caloric intake
-//            // You would fetch this data from the user database
-//            data.add(new ValueDataEntry("Day 1", 2000));
-//            data.add(new ValueDataEntry("Day 2", 1800));
-//            // Add more data entries...
-//            return data;
-//        }
-//
-//        private List<DataEntry> generateMealData() {
-//            // Generate dummy meal data for demonstration
-//            List<DataEntry> data = new ArrayList<>();
-//            // Add data entries for meal types and their frequency
-//            // You would fetch this data from the meal database
-//            data.add(new ValueDataEntry("Breakfast", 3));
-//            data.add(new ValueDataEntry("Lunch", 5));
-//            // Add more data entries...
-//            return data;
-//        }
- */
-
 }
