@@ -20,12 +20,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
-    Button buttonLogin;
+    private TextInputEditText editTextEmail;
+    private TextInputEditText editTextPassword;
+    private Button buttonLogin;
 
-    FirebaseManager manager;
-    FirebaseAuth mAuth;
-    ProgressBar progressBar;
+    private FirebaseManager manager;
+    private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password;
+                String email;
+                String password;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextEmail.getText());
 

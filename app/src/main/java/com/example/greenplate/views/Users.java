@@ -1,24 +1,24 @@
 package com.example.greenplate.views;
 public class Users {
-    String Height;
-    String Weight;
-    String Gender;
+    private String height;
+    private String weight;
+    private String gender;
 
     public Users(String height, String weight, String gender) {
-        Height = height;
-        Weight = weight;
-        Gender = gender;
+        this.height = height;
+        this.weight = weight;
+        this.gender = gender;
     }
 
     public String getHeight() {
-        return Height;
+        return height;
     }
 
     public String getWeight() {
-        return Weight;
+        return weight;
     }
 
     public String getGender() {
-        return Gender;
+        return gender;
     }
 }
