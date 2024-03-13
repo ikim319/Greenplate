@@ -73,6 +73,7 @@ public class InputMeal extends AppCompatActivity {
 
 
 
+
         manager = FirebaseManager.getInstance();
         editTextMeal = findViewById(R.id.editTextMeal);
         editTextCalories = findViewById(R.id.editTextCalories);
@@ -91,7 +92,7 @@ public class InputMeal extends AppCompatActivity {
                 String height = dataSnapshot.child("height").getValue(String.class);
                 String weight = dataSnapshot.child("weight").getValue(String.class);
                 String gender = dataSnapshot.child("gender").getValue(String.class);
-                String calorieGoal = calorieCounter2(height, weight, gender);
+                String calorieGoal = calorieCounter(height, weight, gender);
 
                 if (height == null || weight == null || gender == null) {
 
@@ -266,27 +267,15 @@ public class InputMeal extends AppCompatActivity {
         });
     }
 
-    private String calorieCounter2(String height, String weight, String gender) {
-        int heightInt = 0;
-        if (height != null && !height.isEmpty()) {
-            heightInt = Integer.parseInt(height);
-        }
-        int weightInt = 0;
-        if (weight != null && !weight.isEmpty()) {
-            weightInt = (int) Integer.parseInt(weight);
-        }
-        int calorieGoal = 0;
 
-        if (gender != null && gender.equals("Male")) {
-            calorieGoal = (int) (((6.23 * weightInt) + (12.7 * heightInt) + 66) * 1.55);
-        } else {
-            calorieGoal = (int) (((4.35 * weightInt) + (4.7 * heightInt) + 65) * 1.55);
-        }
-        caloricGoal = calorieGoal;
-        return Integer.toString(calorieGoal);
-    }
     public String calorieCounter(String height, String weight, String gender) {
         InputMealViewModel inputView = new InputMealViewModel();
+        String calorieGoal = inputView.calorieCounter(height, weight, gender);
+        try {
+            caloricGoal = Integer.parseInt(calorieGoal);
+        } catch (NumberFormatException e) {
+            caloricGoal = 0; // Default value
+        }
         return inputView.calorieCounter(height, weight, gender);
     }
 }

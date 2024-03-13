@@ -21,6 +21,10 @@ public class InputMealViewModel extends ViewModel {
             return "N/A";
         }
 
+        if (heightInt <= 0 || weightInt <= 0) {
+            return "N/A";
+        }
+
         int calorieGoal;
 
         if (gender.equals("Male")) {

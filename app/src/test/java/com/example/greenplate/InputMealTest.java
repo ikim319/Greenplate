@@ -102,6 +102,7 @@ public class InputMealTest {
         String result = viewModel.calorieCounter(height, weight, gender);
 
         assertEquals("Calorie calculation for Null input should return N/A", "N/A", result);
+    }
 
     // Test case for verifying calorie calculation when all inputs are empty
     @Test
