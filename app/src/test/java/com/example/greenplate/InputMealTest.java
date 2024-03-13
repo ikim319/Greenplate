@@ -58,6 +58,7 @@ public class InputMealTest {
         assertEquals("Calorie calculation for Non-numeric input should return N/A", "N/A", result);
     }
 
+    
     // Test case for verifying calorie calculation when all inputs are empty
     @Test
     public void testCalorieCounter_AllInputsEmpty() {
