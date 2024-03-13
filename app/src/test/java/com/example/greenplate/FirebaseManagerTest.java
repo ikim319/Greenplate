@@ -2,6 +2,7 @@ package com.example.greenplate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import com.example.greenplate.views.FirebaseManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,13 +63,14 @@ public class FirebaseManagerTest {
      */
 
     // test to verify that reinitializing FirebaseManager returns the same instance
-//    @Test
-//    public void testReinitializeFirebaseManager() {
-//        FirebaseManager instance1 = FirebaseManager.getInstance();
-//        FirebaseManager instance2 = FirebaseManager.getInstance();
-//
-//        // Ensure the reinitialized instance is the same as the original instance
-//        assertEquals(instance1, instance2);
-//    }
+    // @Test
+    // public void testReinitializeFirebaseManager() {
+    //     FirebaseManager instance1 = FirebaseManager.getInstance();
+
+    //     FirebaseManager instance2 = FirebaseManager.getInstance();
+
+    //     // Ensure the reinitialized instance is the same as the original instance
+    //     assertSame(instance1, instance2);
+    // }
 }
 
