@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,13 +29,22 @@ import java.util.Locale;
 public class InputMeal extends AppCompatActivity {
 
 
-    EditText editTextMeal, editTextCalories;
-    FirebaseManager manager;
+    private EditText editTextMeal;
+    private EditText editTextCalories;
+    private FirebaseManager manager;
     private DatabaseReference rootDatabref;
     private DatabaseReference userDatabref;
 
-    public static int todaysCalories;
-    public static int caloricGoal;
+    private static int todaysCalories;
+    private static int caloricGoal;
+
+    public static int getTodaysCalories() {
+        return todaysCalories;
+    }
+
+    public static int getCaloricGoal() {
+        return caloricGoal;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +76,6 @@ public class InputMeal extends AppCompatActivity {
         TextView inputInfoTextView = findViewById(R.id.inputInfoTextView);
         TextView textViewAccountInfo = findViewById(R.id.textViewAccountInfo);
         inputInfoTextView.setVisibility(View.GONE);
-
-
-
 
 
         manager = FirebaseManager.getInstance();

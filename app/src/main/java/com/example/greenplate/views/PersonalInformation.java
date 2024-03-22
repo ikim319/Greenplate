@@ -3,7 +3,6 @@ package com.example.greenplate.views;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import android.app.Person;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,18 +13,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 
 public class PersonalInformation extends AppCompatActivity {
 
-    EditText editTextHeight, editTextWeight;
-    Spinner spinnerGender;
+    private EditText editTextHeight;
+    private EditText editTextWeight;
+    private Spinner spinnerGender;
     private DatabaseReference rootDatabref;
-    FirebaseManager manager;
+    private FirebaseManager manager;
 
 
     @Override
@@ -106,17 +103,17 @@ public class PersonalInformation extends AppCompatActivity {
 
 
     private void savePersonalInfo() {
-        String Height = editTextHeight.getText().toString();
-        String Weight = editTextWeight.getText().toString();
-        String Gender;
+        String height = editTextHeight.getText().toString();
+        String weight = editTextWeight.getText().toString();
+        String gender;
         if (spinnerGender != null) {
-            Gender = spinnerGender.getSelectedItem().toString();
+            gender = spinnerGender.getSelectedItem().toString();
         } else {
-            Gender = "Male";
+            gender = "Male";
         }
 
 
-        Users users = new Users(Height, Weight, Gender);
+        Users users = new Users(height, weight, gender);
         String userId = manager.getAuth().getCurrentUser().getUid();
 
         DatabaseReference userRef = FirebaseManager.getInstance().getRef()

@@ -8,13 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.example.greenplate.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,14 +19,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class AccountCreation extends AppCompatActivity {
-    TextInputEditText editTextEmail, editTextPassword;
-    Button buttonReg;
-    Button buttonBack;
-    FirebaseAuth mAuth;
-    ProgressBar progressBar;
+    private TextInputEditText editTextEmail;
+    private TextInputEditText editTextPassword;
+    private Button buttonReg;
+    private Button buttonBack;
+    private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +42,8 @@ public class AccountCreation extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password;
+                String email;
+                String password;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextEmail.getText());
 
@@ -56,7 +54,8 @@ public class AccountCreation extends AppCompatActivity {
 
 
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(AccountCreation.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountCreation.this,
+                            "Enter password", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

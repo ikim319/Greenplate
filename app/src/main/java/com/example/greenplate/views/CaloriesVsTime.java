@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CaloriesVsTime extends AppCompatActivity {
-    FirebaseManager manager = FirebaseManager.getInstance();;
+    private FirebaseManager manager = FirebaseManager.getInstance();
     private DatabaseReference rootDatabref;
     private DatabaseReference userDatabref;
 
@@ -45,13 +45,12 @@ public class CaloriesVsTime extends AppCompatActivity {
         cartesian.crosshair().enabled(true);
         cartesian.crosshair().yLabel(true);
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-//        cartesian.title("Trend of Sales of the Most Popular Products of ACME Corp.");
-//        cartesian.yAxis(0).title("Number of Bottles Sold (thousands)");
         cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
 
         List<DataEntry> seriesData = new ArrayList<>();
         int totalDataPoints = 8; // Number of days to fetch data for
-        AtomicInteger dataPointsFetched = new AtomicInteger(0); // Counter to track fetched data points
+        AtomicInteger dataPointsFetched = new AtomicInteger(0);
+        // Counter to track fetched data points
 
         // Fetch data for each day
         for (int i = -7; i <= 0; i++) {
@@ -73,7 +72,8 @@ public class CaloriesVsTime extends AppCompatActivity {
         }
     }
 
-    private void populateChart(Cartesian cartesian, AnyChartView anyChartView, List<DataEntry> seriesData) {
+    private void populateChart(Cartesian cartesian, AnyChartView anyChartView,
+                               List<DataEntry> seriesData) {
         Set set = Set.instantiate();
         set.data(seriesData);
         Mapping series1Mapping = set.mapAs("{ x: 'x', value: 'value' }");

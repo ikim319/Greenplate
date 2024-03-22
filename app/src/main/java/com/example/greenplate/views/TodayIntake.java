@@ -14,17 +14,14 @@ import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 import com.example.greenplate.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TodayIntake extends AppCompatActivity {
 
-    FirebaseManager manager = FirebaseManager.getInstance();;
+    private FirebaseManager manager = FirebaseManager.getInstance();
     private DatabaseReference rootDatabref;
     private DatabaseReference userDatabref;
 
@@ -38,8 +35,8 @@ public class TodayIntake extends AppCompatActivity {
         Cartesian cartesian = AnyChart.column();
 
         List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Today", InputMeal.todaysCalories));
-        data.add(new ValueDataEntry("Daily Goal", InputMeal.caloricGoal));
+        data.add(new ValueDataEntry("Today", InputMeal.getTodaysCalories()));
+        data.add(new ValueDataEntry("Daily Goal", InputMeal.getCaloricGoal()));
         Column column = cartesian.column(data);
 
         column.tooltip()
@@ -51,7 +48,6 @@ public class TodayIntake extends AppCompatActivity {
                 .format("{%Value}{groupsSeparator: }");
 
         cartesian.animation(true);
-//        cartesian.title("Top 10 Cosmetic Products by Revenue");
 
         cartesian.yScale().minimum(0d);
 
@@ -60,7 +56,6 @@ public class TodayIntake extends AppCompatActivity {
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
         cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
-//        cartesian.xAxis(0).title("Product");
         cartesian.yAxis(0).title("Calories");
 
         anyChartView.setChart(cartesian);
