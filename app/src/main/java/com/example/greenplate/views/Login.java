@@ -20,17 +20,20 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
-    Button buttonLogin;
-    FirebaseAuth mAuth;
-    ProgressBar progressBar;
+    private TextInputEditText editTextEmail;
+    private TextInputEditText editTextPassword;
+    private Button buttonLogin;
+
+    private FirebaseManager manager;
+    private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance();
+        manager = FirebaseManager.getInstance();
+        mAuth = manager.getAuth();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.btn_login);
@@ -58,7 +61,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password;
+                String email;
+                String password;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextEmail.getText());
 

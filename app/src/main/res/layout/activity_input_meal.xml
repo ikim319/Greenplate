@@ -5,34 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/input_meal"
     tools:context=".views.InputMeal">
+
+
     <Button
         android:id="@+id/btn_Home"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:text="@string/home" />
     <Button
         android:id="@+id/Recipe"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@id/btn_Home"
         android:text="@string/recipe" />
+
     <Button
         android:id="@+id/Ingredient"
-        android:layout_width="wrap_content"
-        android:layout_height="102dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/Recipe"
         android:layout_marginTop="2dp"
         android:text="@string/ingredients" />
     <Button
         android:id="@+id/shoppinglist"
-        android:layout_width="wrap_content"
-        android:layout_height="94dp"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
         android:layout_below="@id/Ingredient"
-        android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="294dp"
         android:text="@string/shopping_list" />
+    <Button
+        android:id="@+id/Logout"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/PInformation"
+        android:gravity="center"
+        android:text="@string/logout" />
+
+    <Button
+        android:id="@+id/PInformation"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/shoppinglist"
+        android:text="@string/personal_info"
+        android:layout_marginTop="2dp" />
 
     <EditText
         android:id="@+id/editTextMeal"
@@ -47,51 +64,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextCalories"
-        android:layout_width="209dp"
-        android:layout_height="57dp"
-        android:layout_below="@+id/editTextMeal"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/enter_calories"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_Log"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_below="@id/editTextCalories"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="-3dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/log" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/editTextMeal">
 
-    <Button
-        android:id="@+id/Logout"
-        android:layout_width="121dp"
-        android:layout_height="70dp"
-        android:layout_below="@id/PInformation"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="456dp"
-        android:layout_marginEnd="294dp"
-        android:gravity="center"
-        android:text="@string/logout" />
 
-    <Button
-        android:id="@+id/PInformation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/shoppinglist"
-        android:text="@string/personal_info"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="294dp" />
+        <EditText
+            android:id="@+id/editTextCalories"
+            android:layout_width="209dp"
+            android:layout_height="57dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/enter_calories"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_Log"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:text="@string/log"
+            app:layout_constraintTop_toBottomOf="@id/editTextCalories"
+            app:layout_constraintStart_toStartOf="@id/editTextCalories"
+            app:layout_constraintEnd_toEndOf="@id/editTextCalories" />
+
+        <Button
+            android:id="@+id/calories_vs_time"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:text="@string/calories_vs_time"
+            app:layout_constraintEnd_toEndOf="@id/editTextCalories"
+            app:layout_constraintStart_toStartOf="@id/editTextCalories"
+            app:layout_constraintTop_toBottomOf="@id/editTextCalories" />
+
+        <Button
+            android:id="@+id/today_intake"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="136dp"
+            android:text="Today's Intake"
+            app:layout_constraintEnd_toEndOf="@id/editTextCalories"
+            app:layout_constraintStart_toStartOf="@id/editTextCalories"
+            app:layout_constraintTop_toBottomOf="@id/editTextCalories" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <TextView
         android:id="@+id/textViewInputMeal"
@@ -109,9 +131,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/PInformation"
-        android:layout_marginTop="38dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="81dp"
         android:text="User Information"
+        android:layout_marginLeft="16dp"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -120,9 +142,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewAccountInfo"
-        android:layout_centerHorizontal="true"
-
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
         android:text="Height: "
         android:textSize="16sp" />
 
@@ -131,16 +152,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/textViewHeight"
-        android:layout_centerHorizontal="true"
         android:layout_alignBaseline="@id/textViewHeight"
         android:text=""
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/textViewWeight"
+        android:layout_marginLeft="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/textViewHeight"
         android:text="Weight: "
         android:textSize="16sp" />
@@ -150,16 +170,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/textViewWeight"
-        android:layout_centerHorizontal="true"
         android:layout_alignBaseline="@id/textViewWeight"
         android:text=""
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/textViewGender"
+        android:layout_marginLeft="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/textViewWeight"
         android:text="Gender: "
         android:textSize="16sp" />
@@ -168,11 +187,63 @@
         android:id="@+id/textViewGenderValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_toEndOf="@id/textViewGender"
         android:layout_alignBaseline="@id/textViewGender"
         android:text=""
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewCalorieGoal"
+        android:layout_marginLeft="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewGender"
+        android:layout_marginTop="10dp"
+        android:text="Calorie Goal:"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewCalorieGoalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textViewCalorieGoal"
+        android:layout_alignBaseline="@id/textViewCalorieGoal"
+        android:layout_marginLeft="10dp"
+        android:text=""
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewTodayCalories"
+        android:layout_marginLeft="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewCalorieGoal"
+        android:layout_marginTop="10dp"
+        android:text="Today's Calories:"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewTodayCaloriesValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/textViewTodayCalories"
+        android:layout_alignBaseline="@id/textViewTodayCalories"
+        android:layout_marginLeft="10dp"
+        android:text=""
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/inputInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please Input Personal Information"
+        android:layout_below="@id/Logout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"/>
+
+
 
 
 </RelativeLayout>

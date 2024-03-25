@@ -1,122 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".views.PersonalInformation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.PersonalInformation">
+
+
+    <Button
+        android:id="@+id/btn_Home"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:text="@string/home" />
+    <Button
+        android:id="@+id/Recipe"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/btn_Home"
+        android:text="@string/recipe" />
+
+    <Button
+        android:id="@+id/Ingredient"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/Recipe"
+        android:layout_marginTop="2dp"
+        android:text="@string/ingredients" />
+    <Button
+        android:id="@+id/shoppinglist"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/Ingredient"
+        android:layout_marginTop="2dp"
+        android:text="@string/shopping_list" />
+    <Button
+        android:id="@+id/Logout"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/btn_inputmeal"
+        android:gravity="center"
+        android:text="@string/logout" />
+
+    <Button
+        android:id="@+id/btn_inputmeal"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/shoppinglist"
+        android:text="@string/input_meal"
+        android:layout_marginTop="2dp" />
+
+    <!-- EditText for Height -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/Recipe"
+        android:layout_marginLeft="165dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-12dp"
+        android:text="@string/personal_info"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/editTextHeight"
+        android:layout_width="209dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter Height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- EditText for Weight -->
+    <EditText
+        android:id="@+id/editTextWeight"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="230dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter Weight"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextHeight" />
+
+    <!-- Spinner for Gender -->
+
+    <Spinner
+        android:id="@+id/spinnerGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_below="@id/editTextWeight"
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/btn_Log"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_below="@id/editTextGender"
-        android:layout_centerInParent="true"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerGender"
         android:layout_centerVertical="true"
-        android:layout_marginTop="-3dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="0dp"
         android:text="@string/log" />
 
-    <Button
-android:id="@+id/btn_Home"
-android:layout_width="116dp"
-android:layout_height="94dp"
-android:text="@string/home" />
-
-<Button
-android:id="@+id/btn_inputmeal"
-android:layout_width="116dp"
-android:layout_height="94dp"
-android:layout_below="@id/btn_Home"
-android:text="@string/input_meal" />
-
-<Button
-android:id="@+id/Recipe"
-android:layout_width="116dp"
-android:layout_height="94dp"
-android:layout_below="@id/btn_inputmeal"
-android:layout_marginTop="10dp"
-android:text="@string/recipe" />
-
-<TextView
-android:layout_width="wrap_content"
-android:layout_height="30dp"
-android:layout_below="@+id/btn_inputmeal"
-android:layout_centerHorizontal="true"
-android:layout_gravity="center"
-android:layout_marginTop="-60dp"
-android:text="@string/personal_info"
-android:textStyle="bold" />
-
-<Button
-android:id="@+id/Ingredient"
-android:layout_width="wrap_content"
-android:layout_height="100dp"
-android:layout_below="@id/Recipe"
-android:layout_marginTop="12dp"
-android:text="@string/ingredients" />
-
-<Button
-android:id="@+id/shoppinglist"
-android:layout_width="wrap_content"
-android:layout_height="94dp"
-android:layout_below="@id/Ingredient"
-android:layout_alignParentEnd="true"
-android:layout_marginTop="12dp"
-android:layout_marginEnd="289dp"
-android:text="@string/shopping_list" />
-
-<Button
-android:id="@+id/Logout"
-android:layout_width="121dp"
-android:layout_height="70dp"
-android:layout_below="@id/shoppinglist"
-android:layout_alignParentTop="true"
-android:layout_alignParentEnd="true"
-android:layout_marginTop="526dp"
-android:layout_marginEnd="289dp"
-android:gravity="center"
-android:text="@string/logout" />
-
-    <!-- EditText for Height -->
-<EditText
-android:id="@+id/editTextHeight"
-android:layout_width="209dp"
-android:layout_height="57dp"
-android:layout_marginStart="160dp"
-android:layout_marginTop="160dp"
-android:layout_marginEnd="16dp"
-android:hint="Enter Height"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- EditText for Weight -->
-<EditText
-android:id="@+id/editTextWeight"
-android:layout_width="210dp"
-android:layout_height="wrap_content"
-android:layout_marginStart="160dp"
-android:layout_marginTop="230dp"
-android:layout_marginEnd="16dp"
-android:hint="Enter Weight"
-android:minHeight="48dp"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toBottomOf="@id/editTextHeight" />
-
-    <!-- EditText for Gender -->
-<EditText
-android:id="@+id/editTextGender"
-
-android:layout_width="212dp"
-android:layout_height="wrap_content"
-android:layout_marginStart="160dp"
-android:layout_marginTop="280dp"
-android:layout_marginEnd="16dp"
-android:hint="Enter Gender"
-android:minHeight="48dp"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintTop_toBottomOf="@id/editTextWeight" />
-    </RelativeLayout>
+</RelativeLayout>

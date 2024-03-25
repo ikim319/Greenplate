@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GreenPlate</string>
     <string name="create_account">Create account</string>
@@ -22,9 +23,9 @@
     <string name="ingredients_page">INGREDIENTS PAGE</string>
     <string name="shopping_list_page">SHOPPING LIST PAGE</string>
     <string name="personal_info">Personal Info</string>
-    <string name="enter_weight">Enter Weight</string>
+    <string name="enter_weight">Enter Weight in Lbs</string>
     <string name="enter_gender">Enter Gender</string>
-    <string name="enter_height">Enter Height</string>
+    <string name="enter_height">Enter Height in Inches</string>
     <string name="log">Log</string>
     <string name="enter_meal">Enter Meal</string>
     <string name="enter_calories">Enter Calories</string>
@@ -33,4 +34,13 @@
     <string name="enter_expiration_date">Enter Expiration Date</string>
     <string name="enter_recipe">Enter Recipe</string>
     <string name="enter_serving_size">Enter Serving Size</string>
+    <string name="error">Error</string>
+    <string name="gender_prompt">Gender</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string name="title_activity_calories_vs_time">CaloriesVsTime</string>
+    <string name="open_calories_vs_time">Open Calories Vs Time</string>
+    <string name="calories_vs_time">Calories vs Time</string>
 </resources>
