@@ -6,10 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.greenplate.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Ingredients extends AppCompatActivity {
+
+    EditText editTextIngredientName, editTextQuantities, editTextPoExpire;
+    private DatabaseReference rootDatabref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +28,20 @@ public class Ingredients extends AppCompatActivity {
         Button buttonShoppingList = findViewById(R.id.shoppinglist);
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
+        Button buttonLog = findViewById(R.id.btn_Log);
+
+        editTextIngredientName = findViewById(R.id.editTextIngredientName);
+        editTextQuantities = findViewById(R.id.editTextQuantities);
+        editTextPoExpire = findViewById(R.id.editTextPoExpire);
+
+        rootDatabref = FirebaseDatabase.getInstance().getReference().child("Pantry");
+
+        buttonLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savePantry();
+            }
+        });
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -61,5 +82,15 @@ public class Ingredients extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void savePantry() {
+        String IngredientName = editTextIngredientName.getText().toString();
+        String Quantity = editTextQuantities.getText().toString();
+        String PoExpire = editTextPoExpire.getText().toString();
+
+        Pantry pantry = new Pantry(IngredientName, Quantity, PoExpire);
+        rootDatabref.push().setValue(pantry);
+        Toast.makeText(Ingredients.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
 }

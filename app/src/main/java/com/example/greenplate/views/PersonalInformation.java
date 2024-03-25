@@ -23,7 +23,6 @@ public class PersonalInformation extends AppCompatActivity {
     EditText editTextHeight, editTextWeight, editTextGender;
     private DatabaseReference rootDatabref;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +99,5 @@ public class PersonalInformation extends AppCompatActivity {
         rootDatabref.push().setValue(users);
         Toast.makeText(PersonalInformation.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
-
 
 }

@@ -28,4 +28,9 @@
     <string name="log">Log</string>
     <string name="enter_meal">Enter Meal</string>
     <string name="enter_calories">Enter Calories</string>
+    <string name="enter_quantity">Enter Quantity</string>
+    <string name="enter_ingredient">Enter Ingredient</string>
+    <string name="enter_expiration_date">Enter Expiration Date</string>
+    <string name="enter_recipe">Enter Recipe</string>
+    <string name="enter_serving_size">Enter Serving Size</string>
 </resources>
