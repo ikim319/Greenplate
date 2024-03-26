@@ -26,6 +26,68 @@
         android:layout_below="@id/PInformation"
         android:layout_marginTop="2dp"
         android:text="@string/shopping_list" />
+
+    <EditText
+        android:id="@+id/editTextIngredientName"
+        android:layout_width="209dp"
+        android:layout_height="57dp"
+        android:layout_below="@+id/textViewIngredients"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/enter_ingredient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextQuantities"
+        android:layout_width="209dp"
+        android:layout_height="57dp"
+        android:layout_below="@+id/editTextIngredientName"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/enter_quantity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextPoExpire"
+        android:layout_width="209dp"
+        android:layout_height="57dp"
+        android:layout_below="@+id/editTextQuantities"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/enter_expiration_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_Log"
+        android:layout_width="116dp"
+        android:layout_height="94dp"
+        android:layout_below="@id/editTextPoExpire"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="-3dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/log" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_below="@+id/btn_inputmeal"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="-9dp"
+        android:text="@string/ingredients_page"
+        android:id="@+id/textViewIngredients"
+        android:textStyle="bold" />
+
     <Button
         android:id="@+id/Recipe"
         android:layout_width="125dp"

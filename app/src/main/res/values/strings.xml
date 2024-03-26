@@ -29,6 +29,11 @@
     <string name="log">Log</string>
     <string name="enter_meal">Enter Meal</string>
     <string name="enter_calories">Enter Calories</string>
+    <string name="enter_quantity">Enter Quantity</string>
+    <string name="enter_ingredient">Enter Ingredient</string>
+    <string name="enter_expiration_date">Enter Expiration Date</string>
+    <string name="enter_recipe">Enter Recipe</string>
+    <string name="enter_serving_size">Enter Serving Size</string>
     <string name="error">Error</string>
     <string name="gender_prompt">Gender</string>
     <string-array name="gender_options">
@@ -38,5 +43,4 @@
     <string name="title_activity_calories_vs_time">CaloriesVsTime</string>
     <string name="open_calories_vs_time">Open Calories Vs Time</string>
     <string name="calories_vs_time">Calories vs Time</string>
-
 </resources>

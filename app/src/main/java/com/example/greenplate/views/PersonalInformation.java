@@ -24,7 +24,6 @@ public class PersonalInformation extends AppCompatActivity {
     private DatabaseReference rootDatabref;
     private FirebaseManager manager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +123,4 @@ public class PersonalInformation extends AppCompatActivity {
         userRef.setValue(users);
         Toast.makeText(PersonalInformation.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
-
-
-
 }
