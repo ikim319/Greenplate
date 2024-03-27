@@ -10,7 +10,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +52,34 @@ public class Ingredients extends AppCompatActivity {
         editTextQuantities = findViewById(R.id.editTextQuantities);
         editTextPoExpire = findViewById(R.id.editTextPoExpire);
         editTextIngredientCalories = findViewById(R.id.editTextIngredientCalories);
+        LinearLayout ingredientListLayout = findViewById(R.id.linearIngredients);
 
         rootDatabref = FirebaseDatabase.getInstance().getReference().child("Pantry");
+
+
+        final ScrollView scrollView = findViewById(R.id.scrollIngredients);
+        DatabaseReference userPantryRef = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(manager.getAuth().getUid())
+                .child("Pantry");
+
+        userPantryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ingredientListLayout.removeAllViews();
+                for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
+                    String ingredientName = ingredientSnapshot.child("ingredientName").getValue(String.class);
+                    TextView textView = new TextView(Ingredients.this);
+                    textView.setText(ingredientName);
+
+                    ingredientListLayout.addView(textView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +168,8 @@ public class Ingredients extends AppCompatActivity {
                             editTextQuantities.setText("");
                             editTextPoExpire.setText("");
                             editTextIngredientCalories.setText("");
+                            RelativeLayout addIngredientForm = findViewById(R.id.ingredientForm);
+                            addIngredientForm.setVisibility(View.GONE);
                         }
                     }
 
