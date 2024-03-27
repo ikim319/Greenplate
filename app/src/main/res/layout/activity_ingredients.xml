@@ -27,66 +27,74 @@
         android:layout_marginTop="2dp"
         android:text="@string/shopping_list" />
 
-    <EditText
-        android:id="@+id/editTextIngredientName"
-        android:layout_width="209dp"
-        android:layout_height="57dp"
-        android:layout_below="@+id/textViewIngredients"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/enter_ingredient"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextQuantities"
-        android:layout_width="209dp"
-        android:layout_height="57dp"
-        android:layout_below="@+id/editTextIngredientName"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/enter_quantity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextPoExpire"
-        android:layout_width="209dp"
-        android:layout_height="57dp"
-        android:layout_below="@+id/editTextQuantities"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/enter_expiration_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
-        android:id="@+id/btn_Log"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_below="@id/editTextPoExpire"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="-3dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/log" />
+        android:id="@+id/addIngredient"
+        android:layout_width="125dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/shoppinglist"
+        android:layout_marginStart="170dp"
+        android:text="@string/addIngredient" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_below="@+id/btn_inputmeal"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="-9dp"
-        android:text="@string/ingredients_page"
-        android:id="@+id/textViewIngredients"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:id="@+id/ingredientForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Logout"
+        android:layout_marginTop="-163dp"
+        android:visibility="gone"
+        >
+
+        <EditText
+            android:id="@+id/editTextIngredientName"
+            android:layout_width="209dp"
+            android:layout_height="57dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/enter_ingredient"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextQuantities"
+            android:layout_width="209dp"
+            android:layout_height="57dp"
+            android:layout_below="@+id/editTextIngredientName"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/enter_quantity" />
+
+        <EditText
+            android:id="@+id/editTextIngredientCalories"
+            android:layout_width="209dp"
+            android:layout_height="57dp"
+            android:layout_below="@+id/editTextQuantities"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/enter_calories"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextPoExpire"
+            android:layout_width="209dp"
+            android:layout_height="57dp"
+            android:layout_below="@+id/editTextIngredientCalories"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/enter_expiration_date" />
+
+        <Button
+            android:id="@+id/btn_Log"
+            android:layout_width="116dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextPoExpire"
+            android:layout_marginLeft="160dp"
+            android:text="@string/log" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/Recipe"
