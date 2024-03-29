@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -66,12 +67,46 @@ public class Ingredients extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ingredientListLayout.removeAllViews();
+                TextView titleTextView = new TextView(Ingredients.this);
+                titleTextView.setText("Ingredient List");
+                titleTextView.setTypeface(null, Typeface.BOLD);
+                ingredientListLayout.addView(titleTextView);
                 for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                     String ingredientName = ingredientSnapshot.child("ingredientName").getValue(String.class);
-                    TextView textView = new TextView(Ingredients.this);
-                    textView.setText(ingredientName);
+                    String ingredientQuantity = ingredientSnapshot.child("quantity").getValue(String.class);
 
-                    ingredientListLayout.addView(textView);
+                    LinearLayout ingredientLayout = new LinearLayout(Ingredients.this);
+                    ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView textView = new TextView(Ingredients.this);
+                    String nameAndQuantity = ingredientName + ":    " + ingredientQuantity;
+                    textView.setText(nameAndQuantity);
+
+                    Button addButton = new Button(Ingredients.this);
+                    addButton.setText("+");
+                    addButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int newQuantity = Integer.parseInt(ingredientQuantity) + 1;
+                            ingredientSnapshot.getRef().child("quantity").setValue(String.valueOf(newQuantity));
+                        }
+                    });
+
+                    Button subtractButton = new Button(Ingredients.this);
+                    subtractButton.setText("-");
+                    subtractButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int newQuantity = Integer.parseInt(ingredientQuantity) - 1;
+                            if (newQuantity >= 0) {
+                                ingredientSnapshot.getRef().child("quantity").setValue(String.valueOf(newQuantity));
+                            }
+                        }
+                    });
+                    ingredientLayout.addView(textView);
+                    ingredientLayout.addView(addButton);
+                    ingredientLayout.addView(subtractButton);
+                    ingredientListLayout.addView(ingredientLayout);
                 }
             }
 

@@ -29,18 +29,18 @@
 
     <Button
         android:id="@+id/addIngredient"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/shoppinglist"
-        android:layout_marginStart="170dp"
+        android:layout_width="209dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ingredientTitle"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="21dp"
         android:text="@string/addIngredient" />
 
     <RelativeLayout
         android:id="@+id/ingredientForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Logout"
-        android:layout_marginTop="-163dp"
+        android:layout_below="@id/addIngredient"
         android:visibility="gone"
         >
 
@@ -92,7 +92,7 @@
             android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextPoExpire"
-            android:layout_marginLeft="160dp"
+            android:layout_marginLeft="200dp"
             android:text="@string/log" />
     </RelativeLayout>
 
@@ -120,39 +120,31 @@
         android:layout_marginTop="2dp" />
 
     <TextView
+        android:id="@+id/ingredientTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/PInformation"
+        android:layout_below="@id/btn_Home"
         android:layout_centerHorizontal="true"
         android:text="@string/ingredients"
         android:textSize="18sp"
         android:textStyle="bold" />
+
+
     <ScrollView
         android:id="@+id/scrollIngredients"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         android:layout_below="@id/Logout"
         android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-127dp">
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:id="@+id/linearIngredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ingredient_list"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            android:orientation="vertical">
 
         </LinearLayout>
-
 
     </ScrollView>
 

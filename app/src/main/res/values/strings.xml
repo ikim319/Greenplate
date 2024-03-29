@@ -45,4 +45,5 @@
     <string name="calories_vs_time">Calories vs Time</string>
     <string name="addIngredient">Add Ingredient</string>
     <string name="ingredient_list">Ingredient List</string>
+    <string name="ingredients_list">INGREDIENTS LIST</string>
 </resources>
