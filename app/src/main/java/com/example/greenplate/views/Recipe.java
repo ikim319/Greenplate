@@ -1,5 +1,5 @@
 package com.example.greenplate.views;
-
+import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,11 +13,13 @@ import com.example.greenplate.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class Recipe extends AppCompatActivity {
 
-
-    EditText editTextRecipeName, editTextIngredReq, editTextQuantRecipe;
+    EditText editTextRecipeName, editTextIngredReq;
     private DatabaseReference rootDatabref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +30,10 @@ public class Recipe extends AppCompatActivity {
         Button buttonShoppingList = findViewById(R.id.shoppinglist);
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
-        Button buttonLog = findViewById(R.id.btn_Log);
-
+        Button buttonLog = findViewById(R.id.buttonSave);
 
         editTextRecipeName = findViewById(R.id.editTextRecipeName);
-        editTextIngredReq = findViewById(R.id.editTextIngredReq);
-        editTextQuantRecipe = findViewById(R.id.editTextQuantRecipe);
+        editTextIngredReq = findViewById(R.id.editTextIngredients);
 
         rootDatabref = FirebaseDatabase.getInstance().getReference().child("Cookbook");
 
@@ -86,12 +86,31 @@ public class Recipe extends AppCompatActivity {
     }
 
     private void saveCookBook() {
-        String RecipeName = editTextRecipeName.getText().toString();
-        String IngredReq = editTextIngredReq.getText().toString();
-        String QuantRecipe = editTextQuantRecipe.getText().toString();
+        String recipeName = editTextRecipeName.getText().toString().trim();
+        String ingredientsText = editTextIngredReq.getText().toString().trim();
 
-        Cookbook cookbook = new Cookbook(RecipeName, IngredReq, QuantRecipe);
+        // Check if any field is empty
+        if (recipeName.isEmpty() || ingredientsText.isEmpty()) {
+            Toast.makeText(Recipe.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Split the ingredients by newline
+        String[] ingredientsArray = ingredientsText.split("\n");
+
+        // Create a StringBuilder to construct the ingredients list
+        List<IngredientRequirement> ingredientsBuilder = new ArrayList<>();
+        for (String ingredient : ingredientsArray) {
+            String[] ingredPair;
+            ingredPair = ingredient.split(",");
+            IngredientRequirement ingred = new IngredientRequirement(ingredPair[0], ingredPair[1]);
+            ingredientsBuilder.add(ingred);
+        }
+
+        // Save the recipe with its ingredients
+        Cookbook cookbook = new Cookbook(recipeName, ingredientsBuilder);
         rootDatabref.push().setValue(cookbook);
+
         Toast.makeText(Recipe.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
     }
 
