@@ -5,7 +5,9 @@ import java.util.List;
 public class Cookbook {
     String recipeName;
     List<IngredientRequirement> ingredReqs;
-
+    public Cookbook() {
+        // Default constructor required for calls to DataSnapshot.getValue(Cookbook.class)
+    }
     public Cookbook(String recipeName, List<IngredientRequirement> ingredReqs) {
         this.recipeName = recipeName;
         this.ingredReqs = ingredReqs;
@@ -23,7 +25,9 @@ public class Cookbook {
 class IngredientRequirement {
     String ingredientName;
     String quantity;
-
+    public IngredientRequirement() {
+        // Default constructor required for calls to DataSnapshot.getValue(IngredientRequirement.class)
+    }
     public IngredientRequirement(String ingredientName, String quantity) {
         this.ingredientName = ingredientName;
         this.quantity = quantity;
