@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -67,16 +69,14 @@ public class Ingredients extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ingredientListLayout.removeAllViews();
-                TextView titleTextView = new TextView(Ingredients.this);
-                titleTextView.setText("Ingredient List");
-                titleTextView.setTypeface(null, Typeface.BOLD);
-                ingredientListLayout.addView(titleTextView);
                 for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                     String ingredientName = ingredientSnapshot.child("ingredientName").getValue(String.class);
                     String ingredientQuantity = ingredientSnapshot.child("quantity").getValue(String.class);
 
                     LinearLayout ingredientLayout = new LinearLayout(Ingredients.this);
                     ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    ingredientLayout.setGravity(Gravity.CENTER_HORIZONTAL); // Center elements horizontally
+                    ingredientLayout.setBackgroundResource(R.drawable.border_background);
 
                     TextView textView = new TextView(Ingredients.this);
                     String nameAndQuantity = ingredientName + ":    " + ingredientQuantity;
@@ -98,11 +98,14 @@ public class Ingredients extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             int newQuantity = Integer.parseInt(ingredientQuantity) - 1;
-                            if (newQuantity >= 0) {
+                            if (newQuantity > 0) {
                                 ingredientSnapshot.getRef().child("quantity").setValue(String.valueOf(newQuantity));
+                            } else {
+                                ingredientSnapshot.getRef().removeValue();
                             }
                         }
                     });
+
                     ingredientLayout.addView(textView);
                     ingredientLayout.addView(addButton);
                     ingredientLayout.addView(subtractButton);
