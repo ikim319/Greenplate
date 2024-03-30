@@ -95,7 +95,7 @@ public class InputMealTest {
     @Test
     public void testCalorieCounter_NullInput_Male() {
         InputMealViewModel viewModel = new InputMealViewModel();
-        String height = null;
+        String height = null ;
         String weight = "60";
         String gender = "Male";
 
