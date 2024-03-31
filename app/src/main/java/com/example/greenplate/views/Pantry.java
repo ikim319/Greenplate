@@ -1,5 +1,7 @@
 package com.example.greenplate.views;
 
+import java.util.Locale;
+
 public class Pantry {
     String IngredientName;
     String Quantity;
