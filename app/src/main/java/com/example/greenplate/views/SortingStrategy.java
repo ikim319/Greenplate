@@ -1,2 +1,7 @@
-package com.example.greenplate.views;public class SortingStrategy {
+package com.example.greenplate.views;
+
+import java.util.List;
+
+public interface SortingStrategy {
+    void sort(List<Cookbook> recipes);
 }
