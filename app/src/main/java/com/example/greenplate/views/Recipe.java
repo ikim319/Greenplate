@@ -1,4 +1,6 @@
 package com.example.greenplate.views;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -72,51 +74,24 @@ public class Recipe extends AppCompatActivity {
         buttonSortAlphabetical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Recipe recipeActivity = new Recipe();
-                SortingStrategy alphabeticalSortingStrategy = new AlphabeticalSortingStrategy();
-                recipeActivity.setSortingStrategy(alphabeticalSortingStrategy);
-                recipeActivity.sortRecipes();
+                sortRecipesAlphabetically();
             }
         });
+//        This is Isaacs button for sorting in alphabetical order
+//        buttonSortAlphabetical.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Recipe recipeActivity = new Recipe();
+//                SortingStrategy alphabeticalSortingStrategy = new AlphabeticalSortingStrategy();
+//                recipeActivity.setSortingStrategy(alphabeticalSortingStrategy);
+//                recipeActivity.sortRecipesAlphabetically();
+//            }
+//        });
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(Recipe.this, Home.class));
             }
         });
-//        buttonShoppingList.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // navigate to our login
-//                startActivity(new Intent(Recipe.this, ShoppingList.class));
-//            }
-//        });
-//
-//        buttonIngredients.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // navigate to our login
-//                startActivity(new Intent(Recipe.this, Ingredients.class));
-//            }
-//        });
-//
-//        buttonInputMeal.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // navigate to our login
-//                startActivity(new Intent(Recipe.this, InputMeal.class));
-//            }
-//        });
-//
-//        buttonBackWelcome.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(Recipe.this, Login.class));
-//            }
-//        });
-//
-//        buttonPersonalInfo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(Recipe.this, PersonalInformation.class));
-//            }
-//        });
         displayRecipes();
     }
     public void setSortingStrategy(SortingStrategy sortingStrategy) {
@@ -161,77 +136,71 @@ public class Recipe extends AppCompatActivity {
             }
         });
     }
+    //My method for sorting alphabetically, no interface
+    private void sortRecipesAlphabetically() {
+        DatabaseReference recipesRef = manager.getRef().child("Cookbook");
 
-//    private void sortRecipesAlphabetically() {
-//        DatabaseReference recipesRef = manager.getRef().child("Cookbook");
-//
-//        recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                List<Cookbook> recipes = new ArrayList<>();
-//                for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
-//                    Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
-//                    if (cookbook != null) {
-//                        recipes.add(cookbook);
-//                    }
-//                }
-//
-//                // Sort recipes alphabetically by recipe name
-//                Collections.sort(recipes, new Comparator<Cookbook>() {
-//                    @Override
-//                    public int compare(Cookbook r1, Cookbook r2) {
-//                        return r1.getRecipeName().compareToIgnoreCase(r2.getRecipeName());
-//                    }
-//                });
-//
-//                // Update the recipe list layout with sorted recipes
-//                updateRecipeListLayout(recipes);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
-    public void sortRecipes() {
-        if (sortingStrategy != null) {
-            DatabaseReference recipesRef = manager.getRef().child("Cookbook");
-            recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Cookbook> recipes = new ArrayList<>();
-                    for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
-                        Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
-                        if (cookbook != null) {
-                            recipes.add(cookbook);
-                        }
+        recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Cookbook> recipes = new ArrayList<>();
+                for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
+                    Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
+                    if (cookbook != null) {
+                        recipes.add(cookbook);
                     }
-                    sortingStrategy.sort(recipes);
-                    updateRecipeListLayout(recipes);
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    lastToast = Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT);
-                    lastToastMessage = "Failed to load recipes.";
-                    lastToast.show();
-                }
-            });
-        } else {
-            lastToast = Toast.makeText(Recipe.this, "Sorting strategy not set.", Toast.LENGTH_SHORT);
-            lastToastMessage = "Sorting strategy not set.";
-            lastToast.show();
-        }
+                // Sort recipes alphabetically by recipe name
+                Collections.sort(recipes, new Comparator<Cookbook>() {
+                    @Override
+                    public int compare(Cookbook r1, Cookbook r2) {
+                        return r1.getRecipeName().compareToIgnoreCase(r2.getRecipeName());
+                    }
+                });
+
+                // Update the recipe list layout with sorted recipes
+                updateRecipeListLayout(recipes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    /* Example usage:
-    Recipe recipeActivity = new Recipe();
-    SortingStrategy alphabeticalSortingStrategy = new AlphabeticalSortingStrategy();
-    recipeActivity.setSortingStrategy(alphabeticalSortingStrategy);
-    recipeActivity.sortRecipes(); */
-
+//    Issac's Sorting Method with Interface
+//    public void sortRecipes() {
+//        if (sortingStrategy != null) {
+//            DatabaseReference recipesRef = manager.getRef().child("Cookbook");
+//            recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    List<Cookbook> recipes = new ArrayList<>();
+//                    for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
+//                        Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
+//                        if (cookbook != null) {
+//                            recipes.add(cookbook);
+//                        }
+//                    }
+//                    sortingStrategy.sort(recipes);
+//                    updateRecipeListLayout(recipes);
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    lastToast = Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT);
+//                    lastToastMessage = "Failed to load recipes.";
+//                    lastToast.show();
+//                }
+//            });
+//        } else {
+//            lastToast = Toast.makeText(Recipe.this, "Sorting strategy not set.", Toast.LENGTH_SHORT);
+//            lastToastMessage = "Sorting strategy not set.";
+//            lastToast.show();
+//        }
+//    }
 
     // Helper method to update the recipe list layout with sorted recipes
     private void updateRecipeListLayout(List<Cookbook> recipes) {
@@ -243,9 +212,6 @@ public class Recipe extends AppCompatActivity {
             textView.setText(recipe.getRecipeName());
             textView.setTextSize(18);
             textView.setPadding(0, 8, 0, 8);
-            // Set background color or icon based on ingredient availability
-            // Note: You may need to update this part if ingredient availability is not present in Cookbook object
-//            setIngredientAvailabilityVisualIndicator(textView, true); // Assume all recipes have ingredients available
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -256,6 +222,7 @@ public class Recipe extends AppCompatActivity {
         }
     }
 
+    //Saves recipe to cookbook database
     public void saveCookBook() {
         String recipeName = editTextRecipeName.getText().toString().trim();
         String ingredientsText = editTextIngredReq.getText().toString().trim();
@@ -289,6 +256,7 @@ public class Recipe extends AppCompatActivity {
         lastToast.show();
     }
 
+    //This method displays the recipes when the recipe activity is created
     private void displayRecipes() {
         LinearLayout recipeListLayout = findViewById(R.id.linearRecipes);
         rootDatabref.addValueEventListener(new ValueEventListener() {
@@ -312,18 +280,18 @@ public class Recipe extends AppCompatActivity {
                                     displayRecipeDetails(cookbook); // Pass the clicked recipe to display details
                                 }
                             });
-                            // Set background color or icon based on ingredient availability
-                            checkIngredientAvailability(cookbook, new OnIngredientAvailabilityCheckedListener() {
-                                @Override
-                                public void onAllIngredientsChecked(boolean allAvailable) {
-                                    if (allAvailable) {
-                                        textView.setBackgroundColor(getResources().getColor(R.color.white)); // Change to the appropriate color
-                                    } else {
-                                        textView.setBackgroundColor(getResources().getColor(R.color.black)); // Change to the appropriate color
-                                    }
-                                    recipeListLayout.addView(textView);
-                                }
-                            });
+                            // This part is for checking whether a user has ingredients and sets color accordingly, using checkIngredientAvailability
+//                            checkIngredientAvailability(cookbook, new OnIngredientAvailabilityCheckedListener() {
+//                                @Override
+//                                public void onAllIngredientsChecked(boolean allAvailable) {
+//                                    if (allAvailable) {
+//                                        textView.setBackgroundColor(getResources().getColor(R.color.white)); // Change to the appropriate color
+//                                    } else {
+//                                        textView.setBackgroundColor(getResources().getColor(R.color.black)); // Change to the appropriate color
+//                                    }
+//                                    recipeListLayout.addView(textView);
+//                                }
+//                            });
                         } else {
                             // Handle case where ingredReqs is null
                             // This could be due to missing or improperly formatted data in the database
@@ -345,7 +313,7 @@ public class Recipe extends AppCompatActivity {
     }
 
 
-
+    //This method is meant to check a user's pantry for the ingredients
     private void checkIngredientAvailability(Cookbook recipe, OnIngredientAvailabilityCheckedListener listener) {
         DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
                 .child("Users")
@@ -357,7 +325,6 @@ public class Recipe extends AppCompatActivity {
 
         for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
             String ingredientName = ingredient.getIngredientName();
-            // Inside checkIngredientAvailability method
             int requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
 
             userPantryRef.orderByChild("ingredientName").equalTo(ingredientName)
@@ -368,6 +335,7 @@ public class Recipe extends AppCompatActivity {
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     Pantry pantryItem = snapshot.getValue(Pantry.class);
                                     if (pantryItem != null) {
+                                        //This gets the quantity from the Ingredient in the pantry
                                         int availableQuantity = Integer.parseInt(pantryItem.getQuantity());
                                         if (availableQuantity >= requiredQuantity) {
                                             // Ingredient available in sufficient quantity
@@ -403,7 +371,9 @@ public class Recipe extends AppCompatActivity {
     interface OnIngredientAvailabilityCheckedListener {
         void onAllIngredientsChecked(boolean allAvailable);
     }
-    // Method to show recipe details in a new activity or fragment
+
+
+    // Method to show recipe details
     private void displayRecipeDetails(Cookbook recipe) {
         // Populate UI elements with recipe details
         TextView recipeNameTextView = findViewById(R.id.recipeNameTextView);
