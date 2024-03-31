@@ -36,10 +36,24 @@ public class PantryViewModel extends ViewModel {
     public String checkValidIngredientEntry(String ingredientName, String quantity, String calories, String expiry) {
         // Implement logic to check if all fields are valid
         if (ingredientName.isEmpty() || quantity.isEmpty() || calories.isEmpty() || expiry.isEmpty()) {
-            return "Failed: All fields cannot be empty.";
-        } else {
-            // Additional validation logic can be added here if needed
+            return "Failed: All fields must be nonempty.";
+        } else if (!isNumeric(quantity) || !isNumeric(calories)){
+            return "Failed: Calories and Quantity must be numbers.";
+        }
+        else if (Integer.parseInt(quantity) <= 0) {
+            return "Failed: Negative Value or 0.";
+        }
+        else {
             return "Success: Ingredient entry is valid.";
         }
+    }
+
+    public static boolean isNumeric(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }
