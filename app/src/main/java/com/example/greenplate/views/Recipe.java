@@ -29,9 +29,12 @@ public class Recipe extends AppCompatActivity {
     public EditText editTextIngredReq;
     private DatabaseReference rootDatabref;
     private FirebaseManager manager;
-    public EditText editTextSearch;
+    private EditText editTextSearch;
     private Button buttonSearch;
     private SortingStrategy sortingStrategy;
+    public Toast lastToast; // Field to hold the last displayed Toast
+    public String lastToastMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,10 @@ public class Recipe extends AppCompatActivity {
         buttonSortAlphabetical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sortRecipes();
+                Recipe recipeActivity = new Recipe();
+                SortingStrategy alphabeticalSortingStrategy = new AlphabeticalSortingStrategy();
+                recipeActivity.setSortingStrategy(alphabeticalSortingStrategy);
+                recipeActivity.sortRecipes();
             }
         });
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +126,9 @@ public class Recipe extends AppCompatActivity {
         String searchQuery = editTextSearch.getText().toString().trim();
 
         if (searchQuery.isEmpty()) {
-            Toast.makeText(this, "Please enter a recipe name to search.", Toast.LENGTH_SHORT).show();
+            lastToast = Toast.makeText(this, "Please enter a recipe name to search.", Toast.LENGTH_SHORT);
+            lastToastMessage = "Please enter a recipe name to search.";
+            lastToast.show();
             return;
         }
 
@@ -139,13 +147,17 @@ public class Recipe extends AppCompatActivity {
                     }
                 }
                 if (!recipeFound) {
-                    Toast.makeText(Recipe.this, "Recipe not found.", Toast.LENGTH_SHORT).show();
+                    lastToast = Toast.makeText(Recipe.this, "Recipe not found.", Toast.LENGTH_SHORT);
+                    lastToastMessage = "Recipe not found.";
+                    lastToast.show();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(Recipe.this, "Failed to search for recipe.", Toast.LENGTH_SHORT).show();
+                lastToast = Toast.makeText(Recipe.this, "Failed to search for recipe.", Toast.LENGTH_SHORT);
+                lastToastMessage = "Failed to search for recipe.";
+                lastToast.show();
             }
         });
     }
@@ -202,11 +214,15 @@ public class Recipe extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
+                    lastToast = Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT);
+                    lastToastMessage = "Failed to load recipes.";
+                    lastToast.show();
                 }
             });
         } else {
-            Toast.makeText(Recipe.this, "Sorting strategy not set.", Toast.LENGTH_SHORT).show();
+            lastToast = Toast.makeText(Recipe.this, "Sorting strategy not set.", Toast.LENGTH_SHORT);
+            lastToastMessage = "Sorting strategy not set.";
+            lastToast.show();
         }
     }
 
@@ -246,7 +262,9 @@ public class Recipe extends AppCompatActivity {
 
         // Check if any field is empty
         if (recipeName.isEmpty() || ingredientsText.isEmpty()) {
-            Toast.makeText(Recipe.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            lastToast = Toast.makeText(Recipe.this, "Please fill in all fields", Toast.LENGTH_SHORT);
+            lastToastMessage = "Please fill in all fields.";
+            lastToast.show();
             return;
         }
 
@@ -266,7 +284,9 @@ public class Recipe extends AppCompatActivity {
         Cookbook cookbook = new Cookbook(recipeName, ingredientsBuilder);
         rootDatabref.push().setValue(cookbook);
 
-        Toast.makeText(Recipe.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
+        lastToast = Toast.makeText(Recipe.this, "Saved successfully!", Toast.LENGTH_SHORT);
+        lastToastMessage = "Saved successfully!";
+        lastToast.show();
     }
 
     private void displayRecipes() {
@@ -307,7 +327,9 @@ public class Recipe extends AppCompatActivity {
                         } else {
                             // Handle case where ingredReqs is null
                             // This could be due to missing or improperly formatted data in the database
-                            Toast.makeText(Recipe.this, "Error: Ingredients not found for recipe " + cookbook.getRecipeName(), Toast.LENGTH_SHORT).show();
+                            lastToast = Toast.makeText(Recipe.this, "Error: Ingredients not found for recipe " + cookbook.getRecipeName(), Toast.LENGTH_SHORT);
+                            lastToastMessage = "Error: Ingredients not found for recipe " + cookbook.getRecipeName();
+                            lastToast.show();
                         }
                     }
                 }
@@ -315,7 +337,9 @@ public class Recipe extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
+                lastToast = Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT);
+                lastToastMessage = "Failed to load recipes.";
+                lastToast.show();
             }
         });
     }
