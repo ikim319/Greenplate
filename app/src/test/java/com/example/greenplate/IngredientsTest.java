@@ -53,4 +53,18 @@ public class IngredientsTest {
         boolean result = pantryViewModel.checkDuplicateIngredient(ingredientName, existingIngredients);
         assertEquals("All empty inputs.", false, result);
     }
+
+    @Test
+    public void testNonNumericalInputs() {
+        PantryViewModel pantryViewModel = new PantryViewModel();
+        String result = pantryViewModel.checkValidIngredientEntry("name", "a", "5", "10");
+        assertEquals("Non-numerical calories/quantity", "Failed: Calories and Quantity must be numbers.", result);
+    }
+
+    @Test
+    public void testnonNumericalInputs2() {
+        PantryViewModel pantryViewModel = new PantryViewModel();
+        String result = pantryViewModel.checkValidIngredientEntry("name", "123b", "5", "10");
+        assertEquals("Non-numerical calories/quantity", "Failed: Calories and Quantity must be numbers.", result);
+    }
 }
