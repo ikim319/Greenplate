@@ -30,6 +30,8 @@ public class Recipe extends AppCompatActivity {
     EditText editTextRecipeName, editTextIngredReq;
     private DatabaseReference rootDatabref;
     private FirebaseManager manager;
+    EditText editTextSearch;
+    Button buttonSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +48,30 @@ public class Recipe extends AppCompatActivity {
         editTextIngredReq = findViewById(R.id.editTextIngredients);
         manager = FirebaseManager.getInstance();
         rootDatabref = FirebaseDatabase.getInstance().getReference().child("Cookbook");
+        Button buttonSortAlphabetical = findViewById(R.id.buttonSortAlphabetical);
+        // Initialize search bar and button
+        editTextSearch = findViewById(R.id.editTextSearch);
+        buttonSearch = findViewById(R.id.buttonSearch);
 
+        // Set click listener for search button
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchRecipe();
+            }
+        });
         buttonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveCookBook();
             }
         });
-
+        buttonSortAlphabetical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortRecipesAlphabetically();
+            }
+        });
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(Recipe.this, Home.class));
@@ -94,6 +112,94 @@ public class Recipe extends AppCompatActivity {
 //            }
 //        });
         displayRecipes();
+    }
+    private void searchRecipe() {
+        String searchQuery = editTextSearch.getText().toString().trim();
+
+        if (searchQuery.isEmpty()) {
+            Toast.makeText(this, "Please enter a recipe name to search.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseReference recipesRef = manager.getRef().child("Cookbook");
+
+        recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean recipeFound = false;
+                for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
+                    Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
+                    if (cookbook != null && cookbook.getRecipeName().equalsIgnoreCase(searchQuery)) {
+                        recipeFound = true;
+                        displayRecipeDetails(cookbook);
+                        break;
+                    }
+                }
+                if (!recipeFound) {
+                    Toast.makeText(Recipe.this, "Recipe not found.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(Recipe.this, "Failed to search for recipe.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void sortRecipesAlphabetically() {
+        DatabaseReference recipesRef = manager.getRef().child("Cookbook");
+
+        recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Cookbook> recipes = new ArrayList<>();
+                for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
+                    Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
+                    if (cookbook != null) {
+                        recipes.add(cookbook);
+                    }
+                }
+
+                // Sort recipes alphabetically by recipe name
+                Collections.sort(recipes, new Comparator<Cookbook>() {
+                    @Override
+                    public int compare(Cookbook r1, Cookbook r2) {
+                        return r1.getRecipeName().compareToIgnoreCase(r2.getRecipeName());
+                    }
+                });
+
+                // Update the recipe list layout with sorted recipes
+                updateRecipeListLayout(recipes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Helper method to update the recipe list layout with sorted recipes
+    private void updateRecipeListLayout(List<Cookbook> recipes) {
+        LinearLayout recipeListLayout = findViewById(R.id.linearRecipes);
+        recipeListLayout.removeAllViews();
+
+        for (Cookbook recipe : recipes) {
+            TextView textView = new TextView(Recipe.this);
+            textView.setText(recipe.getRecipeName());
+            textView.setTextSize(18);
+            textView.setPadding(0, 8, 0, 8);
+            // Set background color or icon based on ingredient availability
+            // Note: You may need to update this part if ingredient availability is not present in Cookbook object
+//            setIngredientAvailabilityVisualIndicator(textView, true); // Assume all recipes have ingredients available
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    displayRecipeDetails(recipe); // Pass the clicked recipe to display details
+                }
+            });
+            recipeListLayout.addView(textView);
+        }
     }
 
     private void saveCookBook() {
