@@ -1,6 +1,4 @@
 package com.example.greenplate.views;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -27,11 +25,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Recipe extends AppCompatActivity {
 
-    EditText editTextRecipeName, editTextIngredReq;
+    public EditText editTextRecipeName;
+    public EditText editTextIngredReq;
     private DatabaseReference rootDatabref;
     private FirebaseManager manager;
-    EditText editTextSearch;
-    Button buttonSearch;
+    public EditText editTextSearch;
+    private Button buttonSearch;
+    private SortingStrategy sortingStrategy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,7 @@ public class Recipe extends AppCompatActivity {
         buttonSortAlphabetical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sortRecipesAlphabetically();
+                sortRecipes();
             }
         });
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +113,10 @@ public class Recipe extends AppCompatActivity {
 //        });
         displayRecipes();
     }
-    private void searchRecipe() {
+    public void setSortingStrategy(SortingStrategy sortingStrategy) {
+        this.sortingStrategy = sortingStrategy; //sets sorting strategy
+    }
+    public void searchRecipe() {
         String searchQuery = editTextSearch.getText().toString().trim();
 
         if (searchQuery.isEmpty()) {
@@ -146,38 +149,73 @@ public class Recipe extends AppCompatActivity {
             }
         });
     }
-    private void sortRecipesAlphabetically() {
-        DatabaseReference recipesRef = manager.getRef().child("Cookbook");
 
-        recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Cookbook> recipes = new ArrayList<>();
-                for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
-                    Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
-                    if (cookbook != null) {
-                        recipes.add(cookbook);
+//    private void sortRecipesAlphabetically() {
+//        DatabaseReference recipesRef = manager.getRef().child("Cookbook");
+//
+//        recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                List<Cookbook> recipes = new ArrayList<>();
+//                for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
+//                    Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
+//                    if (cookbook != null) {
+//                        recipes.add(cookbook);
+//                    }
+//                }
+//
+//                // Sort recipes alphabetically by recipe name
+//                Collections.sort(recipes, new Comparator<Cookbook>() {
+//                    @Override
+//                    public int compare(Cookbook r1, Cookbook r2) {
+//                        return r1.getRecipeName().compareToIgnoreCase(r2.getRecipeName());
+//                    }
+//                });
+//
+//                // Update the recipe list layout with sorted recipes
+//                updateRecipeListLayout(recipes);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
+    public void sortRecipes() {
+        if (sortingStrategy != null) {
+            DatabaseReference recipesRef = manager.getRef().child("Cookbook");
+            recipesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<Cookbook> recipes = new ArrayList<>();
+                    for (DataSnapshot recipeSnapshot : dataSnapshot.getChildren()) {
+                        Cookbook cookbook = recipeSnapshot.getValue(Cookbook.class);
+                        if (cookbook != null) {
+                            recipes.add(cookbook);
+                        }
                     }
+                    sortingStrategy.sort(recipes);
+                    updateRecipeListLayout(recipes);
                 }
 
-                // Sort recipes alphabetically by recipe name
-                Collections.sort(recipes, new Comparator<Cookbook>() {
-                    @Override
-                    public int compare(Cookbook r1, Cookbook r2) {
-                        return r1.getRecipeName().compareToIgnoreCase(r2.getRecipeName());
-                    }
-                });
-
-                // Update the recipe list layout with sorted recipes
-                updateRecipeListLayout(recipes);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(Recipe.this, "Failed to load recipes.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(Recipe.this, "Sorting strategy not set.", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    /* Example usage:
+    Recipe recipeActivity = new Recipe();
+    SortingStrategy alphabeticalSortingStrategy = new AlphabeticalSortingStrategy();
+    recipeActivity.setSortingStrategy(alphabeticalSortingStrategy);
+    recipeActivity.sortRecipes(); */
+
 
     // Helper method to update the recipe list layout with sorted recipes
     private void updateRecipeListLayout(List<Cookbook> recipes) {
@@ -202,7 +240,7 @@ public class Recipe extends AppCompatActivity {
         }
     }
 
-    private void saveCookBook() {
+    public void saveCookBook() {
         String recipeName = editTextRecipeName.getText().toString().trim();
         String ingredientsText = editTextIngredReq.getText().toString().trim();
 
