@@ -185,6 +185,22 @@ public class Ingredients extends AppCompatActivity {
             return;
         }
 
+        // New: Check for negative quantities.
+        // Currently, negative quantities are allowed to be inserted in the db as long as
+        // the other fields are properly filled in. this shouldn't be the case
+        // and so this check should ensure that quantities remain positive at all instances.
+
+        // Integer.parseInt(quantity) takes the string value from quantity input
+        // and converts it into the integer datatype.
+        int quantityVal = Integer.parseInt(quantity);
+
+        if (quantityVal < 0) {
+            Toast.makeText(Ingredients.this, "Error: Quantities can't be negative. Try again"
+                + " with non negative values.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         final DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
                 .child("Users")
                 .child(manager.getAuth().getUid())
