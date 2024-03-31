@@ -16,9 +16,7 @@ public class RecipeSearcherTest {
 
     @Before
     public void setUp() {
-        // Initialize the list of recipes before each test
         recipes = new ArrayList<>();
-        // Add sample recipes for testing
         recipes.add(new Cookbook("Pasta Carbonara", null));
         recipes.add(new Cookbook("Chicken Stir Fry", null));
         recipes.add(new Cookbook("Tomato Soup", null));
@@ -26,30 +24,25 @@ public class RecipeSearcherTest {
 
     @After
     public void tearDown() {
-        // Clean up resources after each test
         recipes = null;
     }
 
     @Test
     public void testSearchRecipe_Found() {
-        // Test case where the recipe is found
         String searchQuery = "Chicken Stir Fry";
         assertTrue(RecipeSearcher.searchRecipe(recipes, searchQuery));
     }
 
     @Test
     public void testSearchRecipe_NotFound() {
-        // Test case where the recipe is not found
         String searchQuery = "Spaghetti Bolognese";
         assertFalse(RecipeSearcher.searchRecipe(recipes, searchQuery));
     }
 
     @Test
     public void testSearchRecipe_EmptyQuery() {
-        // Test case where the search query is empty
         String searchQuery = "";
         assertFalse(RecipeSearcher.searchRecipe(recipes, searchQuery));
     }
 
-    // Add more test cases as needed
 }
