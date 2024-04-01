@@ -35,23 +35,23 @@ public class IngredientsTest {
     // Test for duplicate ingredient entry
     @Test
     public void testDuplicateIngredient() {
-        PantryViewModel pantryViewModel = new PantryViewModel();
+        PantryViewModel pantryViewModel1 = new PantryViewModel();
         List<Pantry> existingIngredients = new ArrayList<>();
         existingIngredients.add(new Pantry("Tomato", "2", "50", "2024-12-31")); // Assuming "Tomato" already exists in the pantry
         String ingredientName = "Tomato";
-        boolean result = pantryViewModel.checkDuplicateIngredient(ingredientName, existingIngredients);
+        boolean result = pantryViewModel1.checkDuplicateIngredient(ingredientName, existingIngredients);
         assertEquals("Ingredient already exists in the pantry.", true, result);
     }
 
-    // Test for all empty inputs
+    // Test for all empty arguments
     @Test
     public void testAllEmptyInputs() {
         // Adjusted the test based on available methods in PantryViewModel
-        PantryViewModel pantryViewModel = new PantryViewModel();
+        PantryViewModel pantryViewModel2 = new PantryViewModel();
         String ingredientName = "";
         List<Pantry> existingIngredients = new ArrayList<>(); // Empty list
-        boolean result = pantryViewModel.checkDuplicateIngredient(ingredientName, existingIngredients);
-        assertEquals("All empty inputs.", false, result);
+        boolean result = pantryViewModel2.checkDuplicateIngredient(ingredientName, existingIngredients);
+        assertEquals("All empty inputs values.", false, result);
     }
 
     @Test
