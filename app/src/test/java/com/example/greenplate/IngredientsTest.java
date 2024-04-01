@@ -51,7 +51,7 @@ public class IngredientsTest {
         String ingredientName = "";
         List<Pantry> existingIngredients = new ArrayList<>(); // Empty list
         boolean result = pantryViewModel2.checkDuplicateIngredient(ingredientName, existingIngredients);
-        assertEquals("All empty inputs values.", false, result);
+        assertEquals("All empty inputs values for new ingredient.", false, result);
     }
 
     @Test
