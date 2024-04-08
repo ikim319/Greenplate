@@ -2,7 +2,6 @@ package com.example.greenplate.views;
 
 import java.util.List;
 
-//new class to help with testing
 public class RecipeSearcher {
 
     public static boolean searchRecipe(List<Cookbook> recipes, String searchQuery) {
