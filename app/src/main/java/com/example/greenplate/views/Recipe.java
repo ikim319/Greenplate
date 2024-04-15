@@ -350,9 +350,14 @@ public class Recipe extends AppCompatActivity {
         for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
             String ingredientName = ingredient.getIngredientName();
             // Inside checkIngredientAvailability method
-            int requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
+            int requiredQuantity;
+            try {
+                requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
+            } catch (Exception e) {
+                requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim().substring(0, ingredient.getQuantity().trim().length() - 2));
+            }
 
-
+            int finalRequiredQuantity = requiredQuantity;
             userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -361,7 +366,7 @@ public class Recipe extends AppCompatActivity {
                                     String pantryIngredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
                                     if (pantryIngredientName.equals(ingredientName)) {
                                         int availableQuantity = Integer.parseInt(pantrySnapshot.child("quantity").getValue(String.class));
-                                        if (availableQuantity >= requiredQuantity) {
+                                        if (availableQuantity >= finalRequiredQuantity) {
                                             ingredientsChecked.incrementAndGet();
                                             if (ingredientsChecked.get() == totalIngredients) {
                                                 listener.onAllIngredientsChecked(true);
