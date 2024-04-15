@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
+import com.example.greenplate.model.ShoppingListModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Recipe extends AppCompatActivity {
@@ -423,6 +425,56 @@ public class Recipe extends AppCompatActivity {
         instructionsTextView.setText("Instructions: Add instructions here");
     }
 
+    public void checkAndAddToShoppingList(Cookbook recipe) {
+        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(Objects.requireNonNull(manager.getAuth().getUid()))
+                .child("Pantry");
 
+        DatabaseReference userShoppingListRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(manager.getAuth().getUid())
+                .child("ShoppingList");
+
+        for (IngredientRequirement required : recipe.getIngredReqs()) {
+            final String requiredName = required.getIngredientName();
+            final int requiredQuantity = Integer.parseInt(required.getQuantity().trim());
+
+            userPantryRef.child(requiredName).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int currentQuantity = dataSnapshot.exists() ? Integer.parseInt(dataSnapshot.child("quantity").getValue(String.class)) : 0;
+                    int quantityToAdd = requiredQuantity - currentQuantity;
+
+                    if (quantityToAdd > 0) {
+                        // Check if this ingredient is already in the shopping list
+                        userShoppingListRef.child(requiredName).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot shoppingSnapshot) {
+                                if (shoppingSnapshot.exists()) {
+                                    int existingQuantity = Integer.parseInt(Objects.requireNonNull(shoppingSnapshot.child("quantity").getValue(String.class)));
+                                    shoppingSnapshot.getRef().child("quantity").setValue(String.valueOf(existingQuantity + quantityToAdd));
+                                } else {
+                                    // Add new ingredient to the shopping list
+                                    ShoppingListModel newItem = new ShoppingListModel(requiredName, String.valueOf(quantityToAdd));
+                                    userShoppingListRef.child(requiredName).setValue(newItem);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(Recipe.this, "Error updating shopping list", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(Recipe.this, "Error accessing pantry", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 
 }
