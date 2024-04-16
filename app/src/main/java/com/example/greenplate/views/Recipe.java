@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
+import com.example.greenplate.model.ShoppingListModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Recipe extends AppCompatActivity {
@@ -31,9 +33,11 @@ public class Recipe extends AppCompatActivity {
     private FirebaseManager manager;
     private EditText editTextSearch;
     private Button buttonSearch;
+    private Button buttonAddToShoppingList;
     private SortingStrategy sortingStrategy;
     public Toast lastToast; // Field to hold the last displayed Toast
     public String lastToastMessage;
+    private Cookbook recipe_one;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +50,24 @@ public class Recipe extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
         Button buttonLog = findViewById(R.id.buttonSave);
+        Button buttonSortAlphabetical = findViewById(R.id.buttonSortAlphabetical);
+        Button buttonAddToShoppingList = findViewById(R.id.buttonAddToShoppingList);
 
         editTextRecipeName = findViewById(R.id.editTextRecipeName);
         editTextIngredReq = findViewById(R.id.editTextIngredients);
         manager = FirebaseManager.getInstance();
         rootDatabref = FirebaseDatabase.getInstance().getReference().child("Cookbook");
-        Button buttonSortAlphabetical = findViewById(R.id.buttonSortAlphabetical);
+
         // Initialize search bar and button
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
 
+        buttonAddToShoppingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAndAddToShoppingList(recipe_one);
+            }
+        });
         // Set click listener for search button
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +129,7 @@ public class Recipe extends AppCompatActivity {
             }
         });
         displayRecipes();
+
     }
     public void setSortingStrategy(SortingStrategy sortingStrategy) {
         this.sortingStrategy = sortingStrategy; //sets sorting strategy
@@ -300,6 +313,7 @@ public class Recipe extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     displayRecipeDetails(cookbook); // Pass the clicked recipe to display details
+                                    recipe_one = cookbook;
                                 }
                             });
                             // Set background color or icon based on ingredient availability
@@ -348,43 +362,48 @@ public class Recipe extends AppCompatActivity {
         for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
             String ingredientName = ingredient.getIngredientName();
             // Inside checkIngredientAvailability method
-            int requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
+            int requiredQuantity;
+            try {
+                requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
+            } catch (Exception e) {
+                requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim().substring(0, ingredient.getQuantity().trim().length() - 2));
+            }
 
-
+            int finalRequiredQuantity = requiredQuantity;
             userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                for (DataSnapshot pantrySnapshot : dataSnapshot.getChildren()) {
-                                    String pantryIngredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
-                                    if (pantryIngredientName.equals(ingredientName)) {
-                                        int availableQuantity = Integer.parseInt(pantrySnapshot.child("quantity").getValue(String.class));
-                                        if (availableQuantity >= requiredQuantity) {
-                                            ingredientsChecked.incrementAndGet();
-                                            if (ingredientsChecked.get() == totalIngredients) {
-                                                listener.onAllIngredientsChecked(true);
-                                            }
-                                            return;
-                                        }
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot pantrySnapshot : dataSnapshot.getChildren()) {
+                            String pantryIngredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
+                            if (pantryIngredientName.equals(ingredientName)) {
+                                int availableQuantity = Integer.parseInt(pantrySnapshot.child("quantity").getValue(String.class));
+                                if (availableQuantity >= finalRequiredQuantity) {
+                                    ingredientsChecked.incrementAndGet();
+                                    if (ingredientsChecked.get() == totalIngredients) {
+                                        listener.onAllIngredientsChecked(true);
                                     }
+                                    return;
                                 }
                             }
-                            // Ingredient not found or not available in sufficient quantity
-                            ingredientsChecked.incrementAndGet();
-                            if (ingredientsChecked.get() == totalIngredients) {
-                                listener.onAllIngredientsChecked(false);
-                            }
                         }
+                    }
+                    // Ingredient not found or not available in sufficient quantity
+                    ingredientsChecked.incrementAndGet();
+                    if (ingredientsChecked.get() == totalIngredients) {
+                        listener.onAllIngredientsChecked(false);
+                    }
+                }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle onCancelled event
-                            ingredientsChecked.incrementAndGet();
-                            if (ingredientsChecked.get() == totalIngredients) {
-                                listener.onAllIngredientsChecked(false);
-                            }
-                        }
-                    });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle onCancelled event
+                    ingredientsChecked.incrementAndGet();
+                    if (ingredientsChecked.get() == totalIngredients) {
+                        listener.onAllIngredientsChecked(false);
+                    }
+                }
+            });
         }
     }
 
@@ -397,7 +416,7 @@ public class Recipe extends AppCompatActivity {
         // Populate UI elements with recipe details
         TextView recipeNameTextView = findViewById(R.id.recipeNameTextView);
         TextView ingredientsTextView = findViewById(R.id.ingredientsTextView);
-        TextView instructionsTextView = findViewById(R.id.instructionsTextView);
+        TextView caloriesTextView = findViewById(R.id.caloriesTextView);
 
         // Set the visibility of the recipe details layout to visible
         findViewById(R.id.recipeDetailsLayout).setVisibility(View.VISIBLE);
@@ -405,24 +424,119 @@ public class Recipe extends AppCompatActivity {
         // Set the text of recipe name TextView
         recipeNameTextView.setText(recipe.getRecipeName());
 
-        // Initialize a StringBuilder to construct the ingredients list
+        // Initialize a StringBuilder to construct the ingredients list and calories
         StringBuilder ingredientsBuilder = new StringBuilder();
+        final int[] calories = {0};
 
+        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(manager.getAuth().getUid())
+                .child("Pantry");
         // Iterate through each ingredient requirement and append it to the StringBuilder
+        String calorieText = null;
         for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
             ingredientsBuilder.append(ingredient.getIngredientName())
                     .append(": ")
                     .append(ingredient.getQuantity())
                     .append("\n");
+            final int[] ingredCal = new int[1];
+            userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    AtomicInteger ingredientsProcessed = new AtomicInteger(0);
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot pantrySnapshot : dataSnapshot.getChildren()) {
+                            String pantryIngredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
+                            if (pantryIngredientName.equals(ingredient.getIngredientName())) {
+                                System.out.println(pantrySnapshot.child("ingredientCalories").getValue());
+                                ingredCal[0] = (Integer.parseInt((String) pantrySnapshot.child("ingredientCalories").getValue()));
+                                String quantityString = ingredient.getQuantity().trim();
+                                String numericPart = quantityString.replaceAll("[^\\d.]", ""); // Remove non-numeric characters
+                                int requiredQuantity = Integer.parseInt(numericPart);
+                                calories[0] += (requiredQuantity * ingredCal[0]);
+                                String calorieText = "Calories: " + calories[0];
+                                System.out.println(calorieText);
+                                caloriesTextView.setText(calorieText);
+                            }
+                        }
+                    }
+                    int count = ingredientsProcessed.incrementAndGet();
+                    if (count == recipe.getIngredReqs().size()) {
+                        runOnUiThread(() -> {
+                            // Set the text of ingredients TextView with the constructed string
+                            ingredientsTextView.setText(ingredientsBuilder.toString());
+
+                            // Set the text of calories TextView
+                            String calorieText = "Calories: " + calories[0];
+                            System.out.println(calorieText);
+                            caloriesTextView.setText(calorieText);
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle onCancelled event
+                    return;
+                }
+            });
         }
+
 
         // Set the text of ingredients TextView with the constructed string
         ingredientsTextView.setText(ingredientsBuilder.toString());
-
-        // Set the text of instructions TextView (you need to replace this with actual instructions)
-        instructionsTextView.setText("Instructions: Add instructions here");
+        // Set the text of instructions TextView (you need to replace this with actual instructions
     }
 
+    public void checkAndAddToShoppingList(Cookbook recipe) {
+        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(Objects.requireNonNull(manager.getAuth().getUid()))
+                .child("Pantry");
 
+        DatabaseReference userShoppingListRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(manager.getAuth().getUid())
+                .child("ShoppingList");
 
+        for (IngredientRequirement required : recipe.getIngredReqs()) {
+            final String requiredName = required.getIngredientName();
+            final int requiredQuantity = Integer.parseInt(required.getQuantity().trim());
+
+            userPantryRef.child(requiredName).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int currentQuantity = dataSnapshot.exists() ? Integer.parseInt(dataSnapshot.child("quantity").getValue(String.class)) : 0;
+                    int quantityToAdd = requiredQuantity - currentQuantity;
+
+                    if (quantityToAdd > 0) {
+                        // Check if this ingredient is already in the shopping list
+                        userShoppingListRef.child(requiredName).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot shoppingSnapshot) {
+                                if (shoppingSnapshot.exists()) {
+                                    int existingQuantity = Integer.parseInt(Objects.requireNonNull(shoppingSnapshot.child("quantity").getValue(String.class)));
+                                    shoppingSnapshot.getRef().child("quantity").setValue(String.valueOf(existingQuantity + quantityToAdd));
+                                } else {
+                                    // Add new ingredient to the shopping list
+                                    ShoppingListModel newItem = new ShoppingListModel(requiredName, String.valueOf(quantityToAdd));
+                                    userShoppingListRef.child(requiredName).setValue(newItem);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(Recipe.this, "Error updating shopping list", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(Recipe.this, "Error accessing pantry", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 }
