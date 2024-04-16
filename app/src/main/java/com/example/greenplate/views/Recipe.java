@@ -33,9 +33,11 @@ public class Recipe extends AppCompatActivity {
     private FirebaseManager manager;
     private EditText editTextSearch;
     private Button buttonSearch;
+    private Button buttonAddToShoppingList;
     private SortingStrategy sortingStrategy;
     public Toast lastToast; // Field to hold the last displayed Toast
     public String lastToastMessage;
+    private Cookbook recipe_one;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +50,24 @@ public class Recipe extends AppCompatActivity {
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
         Button buttonLog = findViewById(R.id.buttonSave);
+        Button buttonSortAlphabetical = findViewById(R.id.buttonSortAlphabetical);
+        Button buttonAddToShoppingList = findViewById(R.id.buttonAddToShoppingList);
 
         editTextRecipeName = findViewById(R.id.editTextRecipeName);
         editTextIngredReq = findViewById(R.id.editTextIngredients);
         manager = FirebaseManager.getInstance();
         rootDatabref = FirebaseDatabase.getInstance().getReference().child("Cookbook");
-        Button buttonSortAlphabetical = findViewById(R.id.buttonSortAlphabetical);
+
         // Initialize search bar and button
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
 
+        buttonAddToShoppingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAndAddToShoppingList(recipe_one);
+            }
+        });
         // Set click listener for search button
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +129,7 @@ public class Recipe extends AppCompatActivity {
             }
         });
         displayRecipes();
+
     }
     public void setSortingStrategy(SortingStrategy sortingStrategy) {
         this.sortingStrategy = sortingStrategy; //sets sorting strategy
@@ -302,6 +313,7 @@ public class Recipe extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     displayRecipeDetails(cookbook); // Pass the clicked recipe to display details
+                                    recipe_one = cookbook;
                                 }
                             });
                             // Set background color or icon based on ingredient availability
@@ -428,6 +440,8 @@ public class Recipe extends AppCompatActivity {
 
         // Set the text of instructions TextView (you need to replace this with actual instructions)
         instructionsTextView.setText("Instructions: Add instructions here");
+
+
     }
 
     public void checkAndAddToShoppingList(Cookbook recipe) {
@@ -481,5 +495,4 @@ public class Recipe extends AppCompatActivity {
             });
         }
     }
-
 }
