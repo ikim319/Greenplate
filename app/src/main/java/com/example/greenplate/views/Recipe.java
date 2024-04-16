@@ -416,7 +416,7 @@ public class Recipe extends AppCompatActivity {
         // Populate UI elements with recipe details
         TextView recipeNameTextView = findViewById(R.id.recipeNameTextView);
         TextView ingredientsTextView = findViewById(R.id.ingredientsTextView);
-        TextView instructionsTextView = findViewById(R.id.instructionsTextView);
+        TextView caloriesTextView = findViewById(R.id.caloriesTextView);
 
         // Set the visibility of the recipe details layout to visible
         findViewById(R.id.recipeDetailsLayout).setVisibility(View.VISIBLE);
@@ -424,24 +424,68 @@ public class Recipe extends AppCompatActivity {
         // Set the text of recipe name TextView
         recipeNameTextView.setText(recipe.getRecipeName());
 
-        // Initialize a StringBuilder to construct the ingredients list
+        // Initialize a StringBuilder to construct the ingredients list and calories
         StringBuilder ingredientsBuilder = new StringBuilder();
+        final int[] calories = {0};
 
+        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(manager.getAuth().getUid())
+                .child("Pantry");
         // Iterate through each ingredient requirement and append it to the StringBuilder
+        String calorieText = null;
         for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
             ingredientsBuilder.append(ingredient.getIngredientName())
                     .append(": ")
                     .append(ingredient.getQuantity())
                     .append("\n");
+            final int[] ingredCal = new int[1];
+            userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    AtomicInteger ingredientsProcessed = new AtomicInteger(0);
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot pantrySnapshot : dataSnapshot.getChildren()) {
+                            String pantryIngredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
+                            if (pantryIngredientName.equals(ingredient.getIngredientName())) {
+                                System.out.println(pantrySnapshot.child("ingredientCalories").getValue());
+                                ingredCal[0] = (Integer.parseInt((String) pantrySnapshot.child("ingredientCalories").getValue()));
+                                String quantityString = ingredient.getQuantity().trim();
+                                String numericPart = quantityString.replaceAll("[^\\d.]", ""); // Remove non-numeric characters
+                                int requiredQuantity = Integer.parseInt(numericPart);
+                                calories[0] += (requiredQuantity * ingredCal[0]);
+                                String calorieText = "Calories: " + calories[0];
+                                System.out.println(calorieText);
+                                caloriesTextView.setText(calorieText);
+                            }
+                        }
+                    }
+                    int count = ingredientsProcessed.incrementAndGet();
+                    if (count == recipe.getIngredReqs().size()) {
+                        runOnUiThread(() -> {
+                            // Set the text of ingredients TextView with the constructed string
+                            ingredientsTextView.setText(ingredientsBuilder.toString());
+
+                            // Set the text of calories TextView
+                            String calorieText = "Calories: " + calories[0];
+                            System.out.println(calorieText);
+                            caloriesTextView.setText(calorieText);
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle onCancelled event
+                    return;
+                }
+            });
         }
+
 
         // Set the text of ingredients TextView with the constructed string
         ingredientsTextView.setText(ingredientsBuilder.toString());
-
-        // Set the text of instructions TextView (you need to replace this with actual instructions)
-        instructionsTextView.setText("Instructions: Add instructions here");
-
-
+        // Set the text of instructions TextView (you need to replace this with actual instructions
     }
 
     public void checkAndAddToShoppingList(Cookbook recipe) {

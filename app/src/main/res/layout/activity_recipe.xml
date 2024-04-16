@@ -182,14 +182,14 @@
 
             <!-- Instructions -->
             <TextView
-                android:id="@+id/instructionsTextView"
+                android:id="@+id/caloriesTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ingredientsTextView"
                 android:layout_margin="5dp"
                 android:textStyle="normal"
                 android:textColor="@android:color/black"
-                android:text="Instructions" />
+                 />
             </RelativeLayout>
             <EditText
                 android:id="@+id/editTextSearch"
