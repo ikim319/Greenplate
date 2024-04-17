@@ -102,8 +102,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextRecipeName"
-            android:layout_margin="1dp"
-            android:hint="Ingredients (Name1, Quantity1\nName2, Quantity2\n...)"/>
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:hint="Ingredients (Name1, Quantity1\nName2, Quantity2\n...)" />
 
         <!-- Save Button -->
         <Button
@@ -190,6 +193,13 @@
                 android:textStyle="normal"
                 android:textColor="@android:color/black"
                  />
+                <Button
+                android:id="@+id/buttonCook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cook Meal"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp" />
             </RelativeLayout>
             <EditText
                 android:id="@+id/editTextSearch"
