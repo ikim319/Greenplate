@@ -1,4 +1,6 @@
 package com.example.greenplate.views;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.greenplate.R;
+import com.example.greenplate.model.Meal;
 import com.example.greenplate.model.ShoppingListModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,6 +43,7 @@ public class Recipe extends AppCompatActivity {
     public String lastToastMessage;
     private Cookbook recipe_one;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +57,7 @@ public class Recipe extends AppCompatActivity {
         Button buttonLog = findViewById(R.id.buttonSave);
         Button buttonSortAlphabetical = findViewById(R.id.buttonSortAlphabetical);
         Button buttonAddToShoppingList = findViewById(R.id.buttonAddToShoppingList);
-
+        Button buttonCook = findViewById(R.id.buttonCook);
         editTextRecipeName = findViewById(R.id.editTextRecipeName);
         editTextIngredReq = findViewById(R.id.editTextIngredients);
         manager = FirebaseManager.getInstance();
@@ -87,6 +92,12 @@ public class Recipe extends AppCompatActivity {
                 SortingStrategy alphabeticalSortingStrategy = new AlphabeticalSortingStrategy();
                 setSortingStrategy(alphabeticalSortingStrategy);
                 sortRecipes();
+            }
+        });
+        buttonCook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cookRecipe(recipe_one); // Pass the clicked recipe to display details
             }
         });
         buttonHome.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +240,6 @@ public class Recipe extends AppCompatActivity {
     private void updateRecipeListLayout(List<Cookbook> recipes) {
         LinearLayout recipeListLayout = findViewById(R.id.linearRecipes);
         recipeListLayout.removeAllViews();
-
         for (Cookbook recipe : recipes) {
             TextView textView = new TextView(Recipe.this);
             textView.setText(recipe.getRecipeName());
@@ -256,9 +266,75 @@ public class Recipe extends AppCompatActivity {
                     displayRecipeDetails(recipe); // Pass the clicked recipe to display details
                 }
             });
+
+
         }
     }
+    private void cookRecipe(Cookbook recipe) {
+        TextView mealText = findViewById(R.id.recipeNameTextView);
+        String mealName = mealText.getText().toString();
+        TextView caloriesText = findViewById(R.id.caloriesTextView);
+        String calories = caloriesText.getText().toString();;
+        String numericPart = calories.replaceAll("[^\\d.]", ""); // Remove non-numeric characters
+        Date currentDate = new Date();
 
+        String userId = manager.getAuth().getCurrentUser().getUid();
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatabaseReference userMealRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(userId)
+                .child("Meal_Log");
+
+        String mealId = userMealRef.push().getKey();
+        String formattedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
+
+        Meal meal = new Meal(mealName, numericPart, formattedDate);
+        userMealRef.child(mealId).setValue(meal);
+
+        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(userId)
+                .child("Pantry");
+
+        for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
+            String ingredientName = ingredient.getIngredientName();
+            int requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
+            System.out.println(ingredientName);
+            // Update the pantry quantity for each ingredient used in the recipe
+            userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot pantrySnapshot : dataSnapshot.getChildren()) {
+                            String pantryIngredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
+                            System.out.print("pantryIngredientName");
+                            if (pantryIngredientName.equals(ingredientName)) {
+                                int currentQuantity = Integer.parseInt(pantrySnapshot.child("quantity").getValue(String.class));
+                                int updatedQuantity = currentQuantity - requiredQuantity;
+                                if (updatedQuantity > 0) {
+                                    pantrySnapshot.getRef().child("quantity").setValue(String.valueOf(updatedQuantity));
+                                } else {
+                                    pantrySnapshot.getRef().removeValue();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle onCancelled event
+                    Toast.makeText(Recipe.this, "Error updating pantry", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+    }
     public void saveCookBook() {
         String recipeName = editTextRecipeName.getText().toString().trim();
         String ingredientsText = editTextIngredReq.getText().toString().trim();
@@ -361,14 +437,20 @@ public class Recipe extends AppCompatActivity {
 
         for (IngredientRequirement ingredient : recipe.getIngredReqs()) {
             String ingredientName = ingredient.getIngredientName();
-            // Inside checkIngredientAvailability method
+            // Extract the numeric part of the quantity string and parse it as an integer
             int requiredQuantity;
             try {
-                requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim());
-            } catch (Exception e) {
-                requiredQuantity = Integer.parseInt(ingredient.getQuantity().trim().substring(0, ingredient.getQuantity().trim().length() - 2));
+                // Remove non-numeric characters from the quantity string
+                String numericPart = ingredient.getQuantity().replaceAll("[^\\d.]", "");
+                // Parse the numeric part as an integer
+                requiredQuantity = Integer.parseInt(numericPart);
+            } catch (NumberFormatException e) {
+                // Handle the case where the quantity cannot be parsed as an integer
+                // You may want to log an error message or take appropriate action
+                e.printStackTrace();
+                // Set required quantity to 0 or handle the error as needed
+                requiredQuantity = 0;
             }
-
             int finalRequiredQuantity = requiredQuantity;
             userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -413,6 +495,7 @@ public class Recipe extends AppCompatActivity {
     }
     // Method to show recipe details in a new activity or fragment
     private void displayRecipeDetails(Cookbook recipe) {
+        System.out.println("Reached Deatils");
         // Populate UI elements with recipe details
         TextView recipeNameTextView = findViewById(R.id.recipeNameTextView);
         TextView ingredientsTextView = findViewById(R.id.ingredientsTextView);
