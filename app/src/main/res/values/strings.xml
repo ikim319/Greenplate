@@ -46,4 +46,6 @@
     <string name="addIngredient">Add Ingredient</string>
     <string name="ingredient_list">Ingredient List</string>
     <string name="ingredients_list">INGREDIENTS LIST</string>
+    <string name="add_shopping_item">Add Shopping Item</string>
+    <string name="add">ADD</string>
 </resources>

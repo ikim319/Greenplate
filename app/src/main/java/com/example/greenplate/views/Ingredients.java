@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.greenplate.viewModels.IngredientViewModel;
 import com.example.greenplate.R;
+import com.example.greenplate.viewModels.InputMealViewModel;
+import com.example.greenplate.viewModels.PantryViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +42,7 @@ public class Ingredients extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_ingredients);
         Button buttonHome = findViewById(R.id.btn_Home);
         Button buttonInputMeal = findViewById(R.id.btn_inputmeal);
@@ -179,27 +183,13 @@ public class Ingredients extends AppCompatActivity {
         final String quantity = editTextQuantities.getText().toString();
         final String poExpire = editTextPoExpire.getText().toString();
         final String ingredientCalories = editTextIngredientCalories.getText().toString();
-
-        if (TextUtils.isEmpty(ingredientName) || TextUtils.isEmpty(quantity) || TextUtils.isEmpty(ingredientCalories)) {
-            Toast.makeText(Ingredients.this, "Error: No empty inputs or negative quantity/calories", Toast.LENGTH_SHORT).show();
+        String valid = checkValidity(ingredientName, quantity, ingredientCalories, poExpire);
+        if (valid.equals("Failed: Negative Value or 0.")
+        || valid.equals("Failed: Calories and Quantity must be numbers.") ||
+                valid.equals("Failed: All fields must be nonempty.")) {
+            Toast.makeText(Ingredients.this, valid, Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // New: Check for negative quantities.
-        // Currently, negative quantities are allowed to be inserted in the db as long as
-        // the other fields are properly filled in. this shouldn't be the case
-        // and so this check should ensure that quantities remain positive at all instances.
-
-        // Integer.parseInt(quantity) takes the string value from quantity input
-        // and converts it into the integer datatype.
-        int quantityVal = Integer.parseInt(quantity);
-
-        if (quantityVal < 0) {
-            Toast.makeText(Ingredients.this, "Error: Quantities can't be negative. Try again"
-                + " with non negative values.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
 
         final DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
                 .child("Users")
@@ -232,5 +222,9 @@ public class Ingredients extends AppCompatActivity {
                         Toast.makeText(Ingredients.this, "Database Error", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+    public String checkValidity(String ingredientName, String quantity, String calories, String expiry) {
+        PantryViewModel inputView = new PantryViewModel();
+        return inputView.checkValidIngredientEntry(ingredientName, quantity, calories, expiry);
     }
 }

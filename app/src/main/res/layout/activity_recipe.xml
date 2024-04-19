@@ -10,6 +10,18 @@
         android:orientation="vertical"
         tools:context=".views.Recipe">
 
+        <LinearLayout
+            android:id="@+id/menuLayout"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
         <!-- Buttons -->
         <Button
             android:id="@+id/btn_Home"
@@ -17,62 +29,70 @@
             android:layout_height="40dp"
             android:text="@string/home" />
 
-<!--        <Button-->
-<!--            android:id="@+id/PInformation"-->
-<!--            android:layout_width="122dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_below="@id/btn_Home"-->
-<!--            android:text="@string/personal_info" />-->
+        <Button
+            android:id="@+id/PInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/btn_Home"
+            android:text="@string/personal_info" />
 
-<!--        <Button-->
-<!--            android:id="@+id/Ingredient"-->
-<!--            android:layout_width="122dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_below="@+id/PInformation"-->
-<!--            android:layout_marginTop="2dp"-->
-<!--            android:text="@string/ingredients" />-->
+        <Button
+            android:id="@+id/Ingredient"
+            android:layout_width="122dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/PInformation"
+            android:text="@string/ingredients" />
 
-<!--        <Button-->
-<!--            android:id="@+id/shoppinglist"-->
-<!--            android:layout_width="122dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_below="@id/Ingredient"-->
-<!--            android:layout_marginTop="2dp"-->
-<!--            android:text="@string/shopping_list" />-->
 
-<!--        <TextView-->
-<!--            android:id="@+id/recipeText"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:layout_below="@id/Logout"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:text="@string/recipe"-->
-<!--            android:textStyle="bold" />-->
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+            <Button
+                android:id="@+id/shoppinglist"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@id/Ingredient"
+                android:layout_marginTop="2dp"
+                android:text="@string/shopping_list" />
 
-<!--        <Button-->
-<!--            android:id="@+id/Logout"-->
-<!--            android:layout_width="122dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_below="@id/btn_inputmeal"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/logout" />-->
+        <Button
+            android:id="@+id/Logout"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/btn_inputmeal"
+            android:gravity="center"
+            android:text="@string/logout" />
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_inputmeal"-->
-<!--            android:layout_width="122dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:layout_below="@id/shoppinglist"-->
-<!--            android:text="@string/input_meal"-->
-<!--            android:layout_marginTop="2dp" />-->
+        <Button
+            android:id="@+id/btn_inputmeal"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/shoppinglist"
+            android:text="@string/input_meal"
+            android:layout_marginTop="2dp" />
+        </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recipeText"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_below="@id/menuLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/recipe"
+            android:textStyle="bold" />
 
         <!-- Recipe Name -->
         <EditText
             android:id="@+id/editTextRecipeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btn_Home"
+            android:layout_below="@id/recipeText"
             android:layout_margin="15dp"
             android:hint="Recipe Name"/>
 
@@ -82,8 +102,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/editTextRecipeName"
-            android:layout_margin="1dp"
-            android:hint="Ingredients (Name1, Quantity1\nName2, Quantity2\n...)"/>
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
+            android:hint="Ingredients (Name1, Quantity1\nName2, Quantity2\n...)" />
 
         <!-- Save Button -->
         <Button
@@ -162,14 +185,21 @@
 
             <!-- Instructions -->
             <TextView
-                android:id="@+id/instructionsTextView"
+                android:id="@+id/caloriesTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ingredientsTextView"
                 android:layout_margin="5dp"
                 android:textStyle="normal"
                 android:textColor="@android:color/black"
-                android:text="Instructions" />
+                 />
+                <Button
+                android:id="@+id/buttonCook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cook Meal"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp" />
             </RelativeLayout>
             <EditText
                 android:id="@+id/editTextSearch"
@@ -199,7 +229,14 @@
                     android:text="Search"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="16dp" />
+
             </RelativeLayout>
+
+            <Button
+                android:id="@+id/buttonAddToShoppingList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Missing Ingredients" />
         </LinearLayout>
         <!-- Recipe Details Section -->
     </RelativeLayout>
