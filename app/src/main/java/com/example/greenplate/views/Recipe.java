@@ -252,7 +252,7 @@ public class Recipe extends AppCompatActivity {
                 public void onAllIngredientsChecked(boolean allAvailable) {
                     // Set background color or icon based on ingredient availability
                     if (allAvailable) {
-                        textView.setBackgroundColor(getResources().getColor(R.color.white)); // Change to the appropriate color for available ingredients
+                        textView.setBackgroundColor(getResources().getColor(R.color.green)); // Change to the appropriate color for available ingredients
                     } else {
                         textView.setBackgroundColor(getResources().getColor(R.color.black)); // Change to the appropriate color for unavailable ingredients
                     }
@@ -333,7 +333,6 @@ public class Recipe extends AppCompatActivity {
                 }
             });
         }
-
     }
     public void saveCookBook() {
         String recipeName = editTextRecipeName.getText().toString().trim();
@@ -397,7 +396,7 @@ public class Recipe extends AppCompatActivity {
                                 @Override
                                 public void onAllIngredientsChecked(boolean allAvailable) {
                                     if (allAvailable) {
-                                        textView.setBackgroundColor(getResources().getColor(R.color.white)); // Change to the appropriate color
+                                        textView.setBackgroundColor(getResources().getColor(R.color.green)); // Change to the appropriate color
                                     } else {
                                         textView.setBackgroundColor(getResources().getColor(R.color.black)); // Change to the appropriate color
                                     }

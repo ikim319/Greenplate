@@ -189,26 +189,29 @@ public class Cart extends AppCompatActivity {
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("ShoppingList");
 
-        // Iterate over the list of items to be removed
-        Iterator<String> iterator = itemsToRemove.iterator();
-        while (iterator.hasNext()) {
-            String itemName = iterator.next();
-
-            // Query the database to find the corresponding item
+        for (String itemName : itemsToRemove) {
             shoppingListRef.orderByChild("ingredientName").equalTo(itemName)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                // Remove the item from the database
-                                snapshot.getRef().removeValue();
-                                    iterator.remove(); // Remove the item from the local ArrayList
+                                snapshot.getRef().removeValue().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        // Remove the item from the list after Firebase operation is complete
+                                        itemsToRemove.remove(itemName);
+                                        // If all items are removed, refresh the cart view
+                                        if (itemsToRemove.isEmpty()) {
+                                            displayShoppingListItems();
+                                        }
+                                    } else {
+                                        Log.d("FirebaseError", "Error removing item: " + task.getException().getMessage());
+                                    }
+                                });
                             }
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            // Handle error
                             Toast.makeText(Cart.this, "Database Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
