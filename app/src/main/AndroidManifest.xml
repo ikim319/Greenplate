@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GreenPlate"
         tools:targetApi="31">
-
+        <activity
+            android:name=".views.Cart"
+            android:exported="false" />
         <activity
             android:name=".views.PersonalInformation"
             android:exported="false" />
