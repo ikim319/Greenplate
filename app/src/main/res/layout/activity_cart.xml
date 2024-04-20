@@ -15,23 +15,25 @@
             android:id="@+id/cartLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="200dp"
             android:orientation="vertical"
-            android:layout_marginVertical="200dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
             <TextView
                 android:id="@+id/cartHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="16dp"
                 android:text="@string/cart_list"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:padding="16dp" />
+                android:textStyle="bold" />
 
             <!-- Checkbox for each shopping list item -->
             <LinearLayout
                 android:id="@+id/checkboxLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:orientation="vertical" />
 
@@ -39,6 +41,15 @@
 
     </ScrollView>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cartName"
+        android:layout_marginVertical="200dp"
+        android:layout_marginLeft="150dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="Cart Items"/>
     <Button
         android:id="@+id/btn_buy_items"
         android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
 
 public class Cart extends AppCompatActivity {
 
@@ -103,8 +107,13 @@ public class Cart extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<String> shoppingItems = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String itemName = snapshot.child("itemName").getValue(String.class);
-                    shoppingItems.add(itemName);
+                    String itemName = snapshot.child("ingredientName").getValue(String.class);
+                    if (itemName != null) { // Check if itemName is not null
+                        shoppingItems.add(itemName);
+                        Log.d("ShoppingItemsNew", "Item Name: " + itemName);
+                    } else {
+                        Log.d("ShoppingItemsNew", "Item Name is null");
+                    }
                 }
                 displayShoppingItems(shoppingItems);
             }
@@ -117,23 +126,28 @@ public class Cart extends AppCompatActivity {
         });
     }
 
+
     private void displayShoppingItems(ArrayList<String> shoppingItems) {
         LinearLayout cartLayout = findViewById(R.id.cartLayout);
+        cartLayout.removeAllViews(); // Clear existing views to prevent duplication
+
         for (String item : shoppingItems) {
-            LinearLayout itemLayout = new LinearLayout(this);
-            itemLayout.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout itemLayout = new LinearLayout(this);
+                itemLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            CheckBox checkBox = new CheckBox(this);
-            checkBox.setText(item);
+                CheckBox checkBox = new CheckBox(this);
+                checkBox.setText(item);
 
-            itemLayout.addView(checkBox);
-            cartLayout.addView(itemLayout);
+                itemLayout.addView(checkBox);
+                cartLayout.addView(itemLayout);
         }
     }
+
 
     private void buyItems() {
         LinearLayout cartLayout = findViewById(R.id.cartLayout);
         ArrayList<String> itemsToRemove = new ArrayList<>();
+        ArrayList<View> viewsToRemove = new ArrayList<>();
 
         for (int i = 0; i < cartLayout.getChildCount(); i++) {
             View itemView = cartLayout.getChildAt(i);
@@ -145,12 +159,19 @@ public class Cart extends AppCompatActivity {
                     String itemName = checkBox.getText().toString();
                     // Add the item to the list of items to be removed from the shopping list database
                     itemsToRemove.add(itemName);
+                    // Add the view to be removed to the list
+                    viewsToRemove.add(itemView);
                 }
             }
         }
 
         // Remove checked items from the shopping list database
         removeItemsFromShoppingList(itemsToRemove);
+
+        // Remove the views associated with checked items from the cart layout
+        for (View view : viewsToRemove) {
+            cartLayout.removeView(view);
+        }
 
         // Add checked items to the user's pantry database
         addToPantry(itemsToRemove);
@@ -160,20 +181,28 @@ public class Cart extends AppCompatActivity {
     }
 
 
+
+
     private void removeItemsFromShoppingList(ArrayList<String> itemsToRemove) {
         DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("ShoppingList");
 
-        // Remove each item from the shopping list
-        for (String itemName : itemsToRemove) {
+        // Iterate over the list of items to be removed
+        Iterator<String> iterator = itemsToRemove.iterator();
+        while (iterator.hasNext()) {
+            String itemName = iterator.next();
+
+            // Query the database to find the corresponding item
             shoppingListRef.orderByChild("ingredientName").equalTo(itemName)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                // Remove the item from the database
                                 snapshot.getRef().removeValue();
+                                    iterator.remove(); // Remove the item from the local ArrayList
                             }
                         }
 
@@ -185,6 +214,8 @@ public class Cart extends AppCompatActivity {
                     });
         }
     }
+
+
 
     private void addToPantry(ArrayList<String> itemsToAdd) {
         DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference()
@@ -199,24 +230,36 @@ public class Cart extends AppCompatActivity {
 
         // Add each item to the pantry
         for (String itemName : itemsToAdd) {
-            // Retrieve additional information about the item from the shopping list
-            shoppingListRef.orderByChild("ingredientName").equalTo(itemName)
+            // Check if the item already exists in the pantry
+            pantryRef.orderByChild("ingredientName").equalTo(itemName)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                // Get quantity, expiration date, and other necessary information from the shopping list entry
-                                String quantity = snapshot.child("quantity").getValue(String.class);
-                                String expirationDate = snapshot.child("expirationDate").getValue(String.class);
-                                String poExpire = snapshot.child("poExpire").getValue(String.class);
-                                // You can retrieve other necessary information similarly
+                            if (dataSnapshot.exists()) {
+                                // Item already exists in the pantry, update its quantity if needed
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    // Update the quantity based on the shopping list
+                                    String quantity = snapshot.child("quantity").getValue(String.class);
+                                    if (quantity != null) {
+                                        snapshot.getRef().child("quantity").setValue(quantity);
+                                    }
+                                }
+                            } else {
+                                    // Item doesn't exist in the pantry, add it with default values
+                                    // Get default expiration date (2 weeks ahead of current date)
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.add(Calendar.WEEK_OF_YEAR, 2);
+                                    Date expirationDate = calendar.getTime();
 
-                                // Create a new entry in the pantry for the item
-                                String itemId = pantryRef.push().getKey();
-                                Pantry pantryItem = new Pantry(itemName, quantity, expirationDate, poExpire);
-                                pantryRef.child(itemId).setValue(pantryItem);
+                                    // Set default calorie count (if applicable)
+                                    int defaultCalories = getDefaultCaloriesForItem(itemName);
+
+                                    // Create a new entry in the pantry for the item
+                                    String itemId = pantryRef.push().getKey();
+                                    Pantry pantryItem = new Pantry(itemName, "1", String.valueOf(defaultCalories), expirationDate.toString());
+                                    pantryRef.child(itemId).setValue(pantryItem);
+                                }
                             }
-                        }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
@@ -226,4 +269,10 @@ public class Cart extends AppCompatActivity {
                     });
         }
     }
+    private int getDefaultCaloriesForItem(String itemName) {
+        // Default calorie count for all items (can be adjusted as needed)
+        return 100;
+    }
+
+
 }
