@@ -45,6 +45,7 @@ public class ShoppingList extends AppCompatActivity {
         Button buttonRecipe = findViewById(R.id.Recipe);
         Button buttonBackWelcome = findViewById(R.id.Logout);
         Button buttonPersonalInfo = findViewById(R.id.PInformation);
+        Button buttonCart = findViewById(R.id.btn_Cart);
 
 
         //Form button instantiation
@@ -67,7 +68,6 @@ public class ShoppingList extends AppCompatActivity {
         DatabaseReference userShoppingRef = FirebaseDatabase.getInstance().getReference().child("Users")
                 .child(manager.getAuth().getUid())
                 .child("ShoppingList");
-
         userShoppingRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -122,6 +122,13 @@ public class ShoppingList extends AppCompatActivity {
             }
         });
 
+
+        buttonCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ShoppingList.this, Cart.class));
+            }
+        });
 
         buttonHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -178,7 +185,6 @@ public class ShoppingList extends AppCompatActivity {
             }
         });
     }
-
     private void saveList() {
         final String ingredientName = editTextIngredientName.getText().toString();
         final String quantity = editTextQuantities.getText().toString();
