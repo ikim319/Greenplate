@@ -7,6 +7,15 @@
     tools:context=".views.ShoppingList"
     android:windowSoftInputMode="">
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cartList"
+        android:layout_width="98dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="220dp"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="2dp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,64 +34,69 @@
         android:id="@+id/btn_buy_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Cart"
-        android:layout_marginTop="9dp"
-        android:layout_marginLeft="220dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="170dp"
+        android:layout_marginVertical="420dp"
         android:text="@string/buy_items" />
 
     <Button
         android:id="@+id/btn_Home"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="2dp"
         android:text="@string/home" />
 
     <Button
         android:id="@+id/PInformation"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/btn_Home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="2dp"
         android:text="@string/personal_info" />
 
     <Button
         android:id="@+id/Ingredient"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@+id/PInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:layout_marginVertical="55dp"
+        android:layout_marginLeft="30dp"
         android:text="@string/ingredients" />
 
     <Button
         android:id="@+id/Recipe"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/Ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="160dp"
+        android:layout_marginVertical="55dp"
         android:layout_marginTop="2dp"
         android:text="@string/recipe" />
 
     <Button
         android:id="@+id/Logout"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/btn_inputmeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
+        android:layout_marginLeft="165dp"
+        android:layout_marginVertical="100dp"
         android:gravity="center"
         android:text="@string/logout" />
 
     <Button
         android:id="@+id/btn_inputmeal"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/Recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/input_meal"
+        android:layout_marginLeft="129dp"
         android:layout_marginTop="2dp" />
 
     <Button
         android:id="@+id/shoppinglist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_inputmeal"
         android:layout_marginTop="4dp"
+        android:layout_marginVertical="55dp"
+        android:layout_marginLeft="255dp"
         android:text="@string/shopping_list" />
 
     <TextView
@@ -90,8 +104,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_Home"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginVertical="130dp"
+        android:layout_marginLeft="180dp"
         android:text="@string/cart_list"
         android:textSize="18sp"
         android:textStyle="bold" />
