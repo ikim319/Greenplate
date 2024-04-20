@@ -4,95 +4,121 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.ShoppingList"
+    tools:context=".views.Cart"
     android:windowSoftInputMode="">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_Home"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/cartVal"
+            android:id="@+id/cartLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:layout_marginVertical="200dp"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/cartHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/cart_list"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Checkbox for each shopping list item -->
+            <LinearLayout
+                android:id="@+id/checkboxLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:orientation="vertical" />
+
+        </LinearLayout>
 
     </ScrollView>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cartName"
+        android:layout_marginVertical="200dp"
+        android:layout_marginLeft="150dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="Cart Items"/>
     <Button
         android:id="@+id/btn_buy_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Cart"
-        android:layout_marginTop="9dp"
-        android:layout_marginLeft="220dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="170dp"
+        android:layout_marginVertical="620dp"
         android:text="@string/buy_items" />
 
     <Button
         android:id="@+id/btn_Home"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="2dp"
         android:text="@string/home" />
 
     <Button
         android:id="@+id/PInformation"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/btn_Home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="2dp"
         android:text="@string/personal_info" />
 
     <Button
         android:id="@+id/Ingredient"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@+id/PInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:layout_marginVertical="55dp"
+        android:layout_marginLeft="30dp"
         android:text="@string/ingredients" />
 
     <Button
         android:id="@+id/Recipe"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/Ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="160dp"
+        android:layout_marginVertical="55dp"
         android:layout_marginTop="2dp"
         android:text="@string/recipe" />
 
     <Button
         android:id="@+id/Logout"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/btn_inputmeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
+        android:layout_marginLeft="165dp"
+        android:layout_marginVertical="100dp"
         android:gravity="center"
         android:text="@string/logout" />
 
     <Button
         android:id="@+id/btn_inputmeal"
-        android:layout_width="125dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/Recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/input_meal"
+        android:layout_marginLeft="129dp"
         android:layout_marginTop="2dp" />
 
     <Button
         android:id="@+id/shoppinglist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_inputmeal"
         android:layout_marginTop="4dp"
+        android:layout_marginVertical="55dp"
+        android:layout_marginLeft="255dp"
         android:text="@string/shopping_list" />
 
-    <TextView
-        android:id="@+id/Cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_Home"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="@string/cart_list"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+
+
 </RelativeLayout>
