@@ -213,6 +213,12 @@ public class ShoppingList extends AppCompatActivity {
                             userShoppingRef.child(itemId).setValue(listItem);
                             Toast.makeText(ShoppingList.this, "Saved successfully!", Toast.LENGTH_SHORT).show();
 
+                            // implementation to add item to displayable list in the cart
+                            /*Intent intent = new Intent(ShoppingList.this, Cart.class);
+                            intent.putExtra("ingredientName", ingredientName);
+                            intent.putExtra("quantity", quantity);
+                            startActivity(intent);*/
+
                             editTextIngredientName.setText("");
                             editTextQuantities.setText("");
                             RelativeLayout shoppingForm = findViewById(R.id.shoppingForm);
