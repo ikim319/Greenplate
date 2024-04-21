@@ -571,54 +571,106 @@ public class Recipe extends AppCompatActivity {
     }
 
     public void checkAndAddToShoppingList(Cookbook recipe) {
-        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
-                .child("Users")
-                .child(Objects.requireNonNull(manager.getAuth().getUid()))
-                .child("Pantry");
+        fetchPantryItems(new OnPantryItemsFetchedListener() {
+            @Override
+            public void onPantryItemsFetched(List<Pantry> pantryItems) {
+                if (pantryItems != null) {
+                    List<shoppingIngredient> neededIngredients = new ArrayList<>();
+                    for (IngredientRequirement required : recipe.getIngredReqs()) {
+                        int found = 0;
+                        String requiredName = required.getIngredientName();
+                        int requiredQuantity = Integer.parseInt(required.getQuantity().trim());
+                        for (Pantry item : pantryItems) {
+                            if (item.getIngredientName().equals(requiredName)) {
+                                found = 1;
+                                int currQuantity = Integer.parseInt(item.getQuantity());
+                                int remainingQuantity = requiredQuantity - currQuantity;
+                                if (remainingQuantity > 0) {
+                                    neededIngredients.add(new shoppingIngredient(requiredName, Integer.toString(remainingQuantity)));
+                                }
+                                break;
+                            }
+                        }
+                        if (found == 0) {
+                            neededIngredients.add(new shoppingIngredient(requiredName, required.getQuantity()));
+                        }
+                    }
+                addMissingToShoppingList(neededIngredients);
 
+                } else {
+                   return;
+                }
+            }
+        });
+    }
+
+    private void addMissingToShoppingList(List<shoppingIngredient> missingList) {
         DatabaseReference userShoppingListRef = FirebaseManager.getInstance().getRef()
                 .child("Users")
                 .child(manager.getAuth().getUid())
                 .child("ShoppingList");
 
-        for (IngredientRequirement required : recipe.getIngredReqs()) {
-            final String requiredName = required.getIngredientName();
-            final int requiredQuantity = Integer.parseInt(required.getQuantity().trim());
+        for (shoppingIngredient item : missingList) {
+            final String ingredientName = item.getIngredientName();
+            final String quantity = item.getQuantity();
 
-            userPantryRef.child(requiredName).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    int currentQuantity = dataSnapshot.exists() ? Integer.parseInt(dataSnapshot.child("quantity").getValue(String.class)) : 0;
-                    int quantityToAdd = requiredQuantity - currentQuantity;
-
-                    if (quantityToAdd > 0) {
-                        // Check if this ingredient is already in the shopping list
-                        userShoppingListRef.child(requiredName).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot shoppingSnapshot) {
-                                if (shoppingSnapshot.exists()) {
-                                    int existingQuantity = Integer.parseInt(Objects.requireNonNull(shoppingSnapshot.child("quantity").getValue(String.class)));
-                                    shoppingSnapshot.getRef().child("quantity").setValue(String.valueOf(existingQuantity + quantityToAdd));
-                                } else {
-                                    // Add new ingredient to the shopping list
-                                    ShoppingListModel newItem = new ShoppingListModel(requiredName, String.valueOf(quantityToAdd));
-                                    userShoppingListRef.child(requiredName).setValue(newItem);
+            userShoppingListRef.orderByChild("ingredientName").equalTo(ingredientName)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                // Ingredient already exists in the shopping list, update quantity if needed
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    snapshot.getRef().child("quantity").setValue(String.valueOf(quantity));
                                 }
+                            } else {
+                                // Ingredient does not exist in the shopping list, add new item
+                                ShoppingListModel listItem = new ShoppingListModel(ingredientName, quantity);
+                                String itemId = userShoppingListRef.push().getKey();
+                                userShoppingListRef.child(itemId).setValue(listItem);
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Toast.makeText(Recipe.this, "Error updating shopping list", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(Recipe.this, "Error accessing pantry", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle onCancelled event
+                            Toast.makeText(Recipe.this, "Database Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
+    }
+
+    private void fetchPantryItems(OnPantryItemsFetchedListener listener) {
+        DatabaseReference userPantryRef = FirebaseManager.getInstance().getRef()
+                .child("Users")
+                .child(manager.getAuth().getUid())
+                .child("Pantry");
+
+        List<Pantry> pantryItems = new ArrayList<>();
+
+        userPantryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot pantrySnapshot : dataSnapshot.getChildren()) {
+                    String ingredientName = pantrySnapshot.child("ingredientName").getValue(String.class);
+                    String quantity = pantrySnapshot.child("quantity").getValue(String.class);
+                    String calories = pantrySnapshot.child("ingredientCalories").getValue(String.class);
+                    String expireDate = pantrySnapshot.child("poExpire").getValue(String.class);
+
+                    Pantry pantryItem = new Pantry(ingredientName, quantity, calories, expireDate);
+                    pantryItems.add(pantryItem);
+                }
+                listener.onPantryItemsFetched(pantryItems);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle onCancelled event
+                listener.onPantryItemsFetched(null);
+            }
+        });
+    }
+    interface OnPantryItemsFetchedListener {
+        void onPantryItemsFetched(List<Pantry> pantryItems);
     }
 }

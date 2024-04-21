@@ -268,7 +268,7 @@ public class Cart extends AppCompatActivity {
 
                                     // Create a new entry in the pantry for the item
                                     String itemId = pantryRef.push().getKey();
-                                    Pantry pantryItem = new Pantry(itemName, "1", String.valueOf(defaultCalories), expirationDate.toString());
+                                    Pantry pantryItem = new Pantry(itemName, itemQuantity, String.valueOf(defaultCalories), expirationDate.toString());
                                     pantryRef.child(itemId).setValue(pantryItem);
                                 }
                             }
