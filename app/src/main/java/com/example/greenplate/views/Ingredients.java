@@ -75,6 +75,10 @@ public class Ingredients extends AppCompatActivity {
                 ingredientListLayout.removeAllViews();
                 for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                     String ingredientName = ingredientSnapshot.child("ingredientName").getValue(String.class);
+                    // was originally just ingredientSnapshot.child
+                    // this caused the crash because it returns a DataSnapshot object
+                    // but the .getValue() on the DataSnapshot object can lead to crashes
+                    // if the quantity node doesn't exist/is null.
                     String ingredientQuantity = String.valueOf(ingredientSnapshot.child("quantity").getValue());
 
                     LinearLayout ingredientLayout = new LinearLayout(Ingredients.this);

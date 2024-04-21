@@ -268,7 +268,10 @@ public class Cart extends AppCompatActivity {
 
                                     // Create a new entry in the pantry for the item
                                     String itemId = pantryRef.push().getKey();
-                                    Pantry pantryItem = new Pantry(itemName, "1", String.valueOf(defaultCalories), expirationDate.toString());
+                                    // switched it from a hardcoded quantity value of 1
+                                    // to itemQuantity which is the representative quantity
+                                    // of each item in respect to the value that was added.
+                                    Pantry pantryItem = new Pantry(itemName, itemQuantity, String.valueOf(defaultCalories), expirationDate.toString());
                                     pantryRef.child(itemId).setValue(pantryItem);
                                 }
                             }
@@ -285,6 +288,4 @@ public class Cart extends AppCompatActivity {
         // Default calorie count for all items (can be adjusted as needed)
         return 100;
     }
-
-
 }
