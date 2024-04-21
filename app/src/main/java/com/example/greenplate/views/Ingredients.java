@@ -75,7 +75,7 @@ public class Ingredients extends AppCompatActivity {
                 ingredientListLayout.removeAllViews();
                 for (DataSnapshot ingredientSnapshot : dataSnapshot.getChildren()) {
                     String ingredientName = ingredientSnapshot.child("ingredientName").getValue(String.class);
-                    String ingredientQuantity = ingredientSnapshot.child("quantity").getValue(String.class);
+                    String ingredientQuantity = String.valueOf(ingredientSnapshot.child("quantity").getValue());
 
                     LinearLayout ingredientLayout = new LinearLayout(Ingredients.this);
                     ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
