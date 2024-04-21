@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 public class Cart extends AppCompatActivity {
 
@@ -105,11 +106,14 @@ public class Cart extends AppCompatActivity {
         shoppingListRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> shoppingItems = new ArrayList<>();
+                ArrayList<shoppingIngredient> shoppingItems = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String itemName = snapshot.child("ingredientName").getValue(String.class);
+                    String itemQuantity = snapshot.child("quantity").getValue(String.class);
                     if (itemName != null) { // Check if itemName is not null
-                        shoppingItems.add(itemName);
+                        shoppingIngredient newIngred = new shoppingIngredient(itemName, itemQuantity);
+                        shoppingItems.add(newIngred);
+
                         Log.d("ShoppingItemsNew", "Item Name: " + itemName);
                     } else {
                         Log.d("ShoppingItemsNew", "Item Name is null");
@@ -127,26 +131,24 @@ public class Cart extends AppCompatActivity {
     }
 
 
-    private void displayShoppingItems(ArrayList<String> shoppingItems) {
+    private void displayShoppingItems(ArrayList<shoppingIngredient> shoppingItems) {
         LinearLayout cartLayout = findViewById(R.id.cartLayout);
         cartLayout.removeAllViews(); // Clear existing views to prevent duplication
 
-        for (String item : shoppingItems) {
+        for (shoppingIngredient item : shoppingItems) {
                 LinearLayout itemLayout = new LinearLayout(this);
                 itemLayout.setOrientation(LinearLayout.HORIZONTAL);
 
                 CheckBox checkBox = new CheckBox(this);
-                checkBox.setText(item);
-
+                checkBox.setText(item.getIngredientName() + " (" + item.getQuantity() + ")");
                 itemLayout.addView(checkBox);
                 cartLayout.addView(itemLayout);
         }
     }
 
-
     private void buyItems() {
         LinearLayout cartLayout = findViewById(R.id.cartLayout);
-        ArrayList<String> itemsToRemove = new ArrayList<>();
+        List<shoppingIngredient> itemsToRemove = new ArrayList<>();
         ArrayList<View> viewsToRemove = new ArrayList<>();
 
         for (int i = 0; i < cartLayout.getChildCount(); i++) {
@@ -156,9 +158,15 @@ public class Cart extends AppCompatActivity {
                 CheckBox checkBox = (CheckBox) itemLayout.getChildAt(0);
                 if (checkBox.isChecked()) {
                     // Get the text (item name) of the checked checkbox
-                    String itemName = checkBox.getText().toString();
+                    String[] itemInfo = checkBox.getText().toString().split("\\("); // Split by "("
+                    String itemName = itemInfo[0].trim(); // Get item name
+                    String quantity = itemInfo[1].replaceAll("\\)", "").trim(); // Get quantity and remove ")"
+
+                    // Create ShoppingItem object
+                    shoppingIngredient buyItem = new shoppingIngredient(itemName, quantity);
+
                     // Add the item to the list of items to be removed from the shopping list database
-                    itemsToRemove.add(itemName);
+                    itemsToRemove.add(buyItem);
                     // Add the view to be removed to the list
                     viewsToRemove.add(itemView);
                 }
@@ -183,14 +191,14 @@ public class Cart extends AppCompatActivity {
 
 
 
-    private void removeItemsFromShoppingList(ArrayList<String> itemsToRemove) {
+    private void removeItemsFromShoppingList(List<shoppingIngredient> itemsToRemove) {
         DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("ShoppingList");
 
-        for (String itemName : itemsToRemove) {
-            shoppingListRef.orderByChild("ingredientName").equalTo(itemName)
+        for (shoppingIngredient item : itemsToRemove) {
+            shoppingListRef.orderByChild("ingredientName").equalTo(item.getIngredientName())
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -198,7 +206,7 @@ public class Cart extends AppCompatActivity {
                                 snapshot.getRef().removeValue().addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         // Remove the item from the list after Firebase operation is complete
-                                        itemsToRemove.remove(itemName);
+                                        itemsToRemove.remove(item);
                                         // If all items are removed, refresh the cart view
                                         if (itemsToRemove.isEmpty()) {
                                             displayShoppingListItems();
@@ -218,9 +226,7 @@ public class Cart extends AppCompatActivity {
         }
     }
 
-
-
-    private void addToPantry(ArrayList<String> itemsToAdd) {
+    private void addToPantry(List<shoppingIngredient> itemsToAdd) {
         DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -232,7 +238,9 @@ public class Cart extends AppCompatActivity {
                 .child("Pantry");
 
         // Add each item to the pantry
-        for (String itemName : itemsToAdd) {
+        for (shoppingIngredient item : itemsToAdd) {
+            String itemName = item.getIngredientName();
+            String itemQuantity = item.getQuantity();
             // Check if the item already exists in the pantry
             pantryRef.orderByChild("ingredientName").equalTo(itemName)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -243,8 +251,9 @@ public class Cart extends AppCompatActivity {
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     // Update the quantity based on the shopping list
                                     String quantity = snapshot.child("quantity").getValue(String.class);
+                                    int updatedQuantity = Integer.parseInt(quantity) + Integer.parseInt(itemQuantity);
                                     if (quantity != null) {
-                                        snapshot.getRef().child("quantity").setValue(quantity);
+                                        snapshot.getRef().child("quantity").setValue((Integer.toString(updatedQuantity)));
                                     }
                                 }
                             } else {
