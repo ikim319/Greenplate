@@ -225,7 +225,6 @@ public class Cart extends AppCompatActivity {
                     });
         }
     }
-
     private void addToPantry(List<shoppingIngredient> itemsToAdd) {
         DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
