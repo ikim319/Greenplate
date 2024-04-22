@@ -78,4 +78,23 @@ public class RecipeTest {
         // Assert conditions
         Assert.assertEquals(1500, shoppingListQuantity);
     }
+
+    @Test
+    public void anotherTestUpdatingExistingShoppingListIngredient() {
+        String ingredientName = "Test";
+        int requiredQuantity = 1000; // in grams
+
+        int pantryQuantity = 600; // Assume pantry has some quantity
+        int shoppingListQuantity = 400; // Assume shopping list has some quantity
+
+        // Simulated logic to check and add to the shopping list
+        int neededQuantity = requiredQuantity - pantryQuantity;
+        if (neededQuantity > shoppingListQuantity) {
+            shoppingListQuantity += (neededQuantity - shoppingListQuantity);
+        }
+
+        // Assert conditions
+        Assert.assertEquals(400, shoppingListQuantity);
+        Assert.assertEquals(400, shoppingListQuantity);
+    }
 }

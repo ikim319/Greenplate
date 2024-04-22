@@ -48,4 +48,7 @@
     <string name="ingredients_list">INGREDIENTS LIST</string>
     <string name="add_shopping_item">Add Shopping Item</string>
     <string name="add">ADD</string>
+    <string name="buy_items">Buy Items</string>
+    <string name="cart_list">Cart List</string>
+    <string name="cart">Cart</string>
 </resources>

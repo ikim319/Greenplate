@@ -84,6 +84,15 @@
         android:layout_below="@id/Ingredient"
         android:layout_marginTop="2dp"
         android:text="@string/recipe" />
+
+    <Button
+        android:id="@+id/btn_Cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/cart" />
+
     <Button
         android:id="@+id/Logout"
         android:layout_width="125dp"
