@@ -8,5 +8,4 @@ tracking, a database of recipes with integrated ingredient inventory monitoring,
 management, and shopping list population based on missing recipe ingredients. The app will make it so
 that the users have actionable insights related to recipes, ingredients, and purchasing needs required for
 upcoming meals. The food tracking system improves grocery shopping, dieting, and daily food
-preparation. Your project will be implemented across four sprints.
-
+preparation.
