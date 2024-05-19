@@ -1,4 +1,4 @@
-#GreenPlate: A Sustainable Food Management System.
+#GreenPlate: A Sustainable Food Management System.  
 GreenPlate is dedicated to fostering sustainable eating and shopping habits. The app's design focuses
 on reducing food waste and promoting efficient use of resources. Through this project, users can 
 actively contribute to a more sustainable lifestyle. The Food Tracker app allows users to track
