@@ -9,3 +9,7 @@ management, and shopping list population based on missing recipe ingredients. Th
 that the users have actionable insights related to recipes, ingredients, and purchasing needs required for
 upcoming meals. The food tracking system improves grocery shopping, dieting, and daily food
 preparation.
+
+Note:  
+The implementation of the app is in the app directory, and the other files are design
+documents the team created throughout the process.
